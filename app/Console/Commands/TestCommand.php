@@ -26,7 +26,8 @@ class TestCommand extends Command
      */
     public function handle(Weather $weather)
     {
-        $result = $weather->getByCoords('55.48', '37.56');
+//        $result = $weather->getByCoords('55.48', '37.56');
+        $result = $weather->getByCity('Петушки');
         dd($result);
 
     }
