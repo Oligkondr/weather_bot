@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\City;
+use Exception;
 use Illuminate\Support\Facades\Http;
 
 class Weather
@@ -40,6 +41,9 @@ class Weather
         return $response->json();
     }
 
+    /**
+     * @throws Exception
+     */
     public function getCoordsByCity(string $name): array
     {
         $city = City::query()
@@ -52,7 +56,11 @@ class Weather
                 'appid' => $this->apiKey,
                 'units' => 'metric',
                 'lang' => 'ru',
-            ])->json()[0];
+            ])->json()[0] ?? [];
+
+            if (!$response) {
+                throw new Exception('City not found');
+            }
 
             $city = new City();
             $city->name = $name;
