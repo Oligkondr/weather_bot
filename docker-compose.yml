@@ -21,7 +21,8 @@ services:
             - '.:/var/www/html'
         networks:
             - sail
-        depends_on: {  }
+        depends_on: { }
+        restart: always
 networks:
     sail:
         driver: bridge
