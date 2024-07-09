@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\City;
 use Illuminate\Support\Facades\Http;
 
 class Weather
@@ -39,18 +40,30 @@ class Weather
         return $response->json();
     }
 
-    public function getCoordsByCity(string $city): array
+    public function getCoordsByCity(string $name): array
     {
-        $response = Http::get(self::GEO_API_URL, [
-            'q' => $city,
-            'appid' => $this->apiKey,
-            'units' => 'metric',
-            'lang' => 'ru',
-        ])->json()[0] ?? [];
+        $city = City::query()
+            ->where('name', $name)
+            ->first();
+
+        if (!$city) {
+            $response = Http::get(self::GEO_API_URL, [
+                'q' => $name,
+                'appid' => $this->apiKey,
+                'units' => 'metric',
+                'lang' => 'ru',
+            ])->json()[0];
+
+            $city = new City();
+            $city->name = $name;
+            $city->lat = $response['lat'];
+            $city->lon = $response['lon'];
+            $city->save();
+        }
 
         return [
-            'lat' => $response['lat'],
-            'lon' => $response['lon'],
+            'lat' => $city->lat,
+            'lon' => $city->lon,
         ];
     }
 }
