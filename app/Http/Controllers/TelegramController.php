@@ -3,11 +3,24 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Telegram\Bot\Laravel\Facades\Telegram;
 
 class TelegramController extends Controller
 {
-    public function webHook()
+    public function webhook()
     {
-        file_put_contents(date('YmdHis').'.log', print_r(request(), true));
+        $message = request('message');
+
+        switch ($message['text']) {
+            case '/start':
+
+                break;
+
+            default:
+                Telegram::sendMessage([
+                    'chat_id' => $message['chat']['id'],
+                    'text' => "{$message['from']['first_name']}, твоя команда - говно."
+                ]);
+        }
     }
 }
