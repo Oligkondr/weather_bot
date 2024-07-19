@@ -20,3 +20,4 @@ yarn-error.log
 /.vscode
 /notes.txt
 /.htaccess
+composer.phar
