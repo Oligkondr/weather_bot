@@ -26,14 +26,9 @@ class TestCommand extends Command
      */
     public function handle(Weather $weather)
     {
-        $this->info('Check weather');
-
-        try {
-            $result = $weather->getByCity('Иваново');
-            dd($result);
-        } catch (\Exception $e) {
-            $this->error($e->getMessage());
-        }
-
+//        $result = $weather->getByCoords('10.99', '44.34');
+//        $result = $weather->getCoordsByCity('Москва');
+        $result = $weather->getByCity('Москва');
+        dd($result);
     }
 }
