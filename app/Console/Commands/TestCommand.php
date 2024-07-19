@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Services\Weather;
 use Illuminate\Console\Command;
+use Telegram\Bot\Laravel\Facades\Telegram;
 
 class TestCommand extends Command
 {
@@ -26,9 +27,7 @@ class TestCommand extends Command
      */
     public function handle(Weather $weather)
     {
-//        $result = $weather->getByCoords('10.99', '44.34');
-//        $result = $weather->getCoordsByCity('Москва');
-        $result = $weather->getByCity('Москва');
-        dd($result);
+        $response = Telegram::setWebhook(['url' => 'https://weathercast.ru/telegram/webhook']);
+        dump($response);
     }
 }

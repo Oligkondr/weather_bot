@@ -6,4 +6,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::any('telegram/webhook', [\App\Http\Controllers\TelegramController::class, 'webHook']);
+Route::post('telegram/webhook', [\App\Http\Controllers\TelegramController::class, 'webHook']);
