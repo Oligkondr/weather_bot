@@ -8,6 +8,6 @@ class TelegramController extends Controller
 {
     public function webHook()
     {
-        file_put_contents(date('YmdHis').'.log', request());
+        file_put_contents(date('YmdHis').'.log', print_r(request(), true));
     }
 }
