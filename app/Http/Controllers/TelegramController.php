@@ -18,6 +18,13 @@ class TelegramController extends Controller
                 $this->start();
                 break;
 
+            case '/help':
+                Telegram::sendMessage([
+                    'chat_id' => $this->message['chat']['id'],
+                    'text' => "Пока что есть только команды:",
+                ]);
+                break;
+
             default:
                 Telegram::sendMessage([
                     'chat_id' => $this->message['chat']['id'],
