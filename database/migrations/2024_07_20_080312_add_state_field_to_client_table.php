@@ -11,7 +11,7 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::table('client', function (Blueprint $table) {
+        Schema::table('clients', function (Blueprint $table) {
             $table->integer('state')->default(Client::STATE_COMMAND)->after('is_disable');
         });
     }
@@ -21,7 +21,7 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::table('client', function (Blueprint $table) {
+        Schema::table('clients', function (Blueprint $table) {
             //
         });
     }
