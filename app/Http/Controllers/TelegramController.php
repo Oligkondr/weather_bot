@@ -21,7 +21,7 @@ class TelegramController extends Controller
             case '/help':
                 $text = "Доступные команды:" . PHP_EOL;
                 $text .= '/help' . PHP_EOL;
-                $text .= '/get-weather' . PHP_EOL;
+                $text .= '/get_weather' . PHP_EOL;
 
                 Telegram::sendMessage([
                     'chat_id' => $this->message['chat']['id'],
@@ -29,7 +29,7 @@ class TelegramController extends Controller
                 ]);
                 break;
 
-            case '/get-weather':
+            case '/get_weather':
                 $client = Client::query()
                     ->where('ext_id', $this->message['from']['id'])
                     ->first();
