@@ -33,9 +33,11 @@ class TelegramController extends Controller
                 break;
 
             case '/getweather':
-                $client = Client::query()
-                    ->where('ext_id', $this->message['from']['id'])
-                    ->first();
+                $client = $this->getClient($this->message['from']['id']);
+                Telegram::sendMessage([
+                    'chat_id' => $client->ext_id,
+                    'text' => "{$client->first_name}, у вас пока нет городов в которых вы хотите видеть погоду.",
+                ]);
                 break;
 
             default:
