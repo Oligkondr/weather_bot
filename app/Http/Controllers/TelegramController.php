@@ -2,48 +2,52 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\City;
 use App\Models\Client;
+use App\Services\Weather;
 use Telegram\Bot\Laravel\Facades\Telegram;
 
 class TelegramController extends Controller
 {
     private array $message;
 
-    public function webhook()
+    private ?Client $client;
+
+    private Weather $weather;
+
+    private bool $isNewClient = false;
+
+    public function webhook(Weather $weather): void
     {
+        $this->weather = $weather;
+
         $this->message = request('message');
 
+        $this->client = $this->getClient();
+
+        switch ($this->client->state) {
+            case Client::STATE_COMMAND:
+                $this->commandHandler();
+                break;
+            case Client::STATE_CITIES:
+                $this->citiesHandler();
+                break;
+        }
+    }
+
+    private function commandHandler(): void
+    {
         switch ($this->message['text']) {
             case '/start':
-                $this->start();
+                $this->commandStartHandler();
                 break;
 
             case '/help':
-                $text = "Доступные команды:" . PHP_EOL;
-                $text .= '/help' . PHP_EOL;
-                $text .= '/get_weather' . PHP_EOL;
-
-                Telegram::sendMessage([
-                    'chat_id' => $this->message['chat']['id'],
-                    'text' => $text,
-                ]);
+                $this->commandHelpHandler();
                 break;
 
             case '/get_weather':
-                $client = Client::query()
-                    ->where('ext_id', $this->message['from']['id'])
-                    ->first();
-
-                if ($client->cities->isEmpty()) {
-                    Telegram::sendMessage([
-                        'chat_id' => $client->ext_id,
-                        'text' => "{$client->first_name}, у вас пока нет городов, в которых вы хотите видеть погоду.",
-                    ]);
-
-                    $client->state = Client::STATE_CITIES;
-                    $client->save();
-                }
-
+                $this->commandGetWeatherHandler();
                 break;
 
             default:
@@ -54,31 +58,105 @@ class TelegramController extends Controller
         }
     }
 
-    private function start()
+    private function citiesHandler(): void
     {
+        collect(explode(",", $this->message['text']))
+            ->each(function (string $name) {
+                $name = trim($name);
+                $city = City::query()
+                    ->where('name', 'like', $name)
+                    ->first();
 
+                if (!$city) {
+                    try {
+                        $city = $this->weather->getCityByName($name);
+
+                    } catch (\Exception $e) {
+                        $text = "{$name}, не знаем такого города.";
+
+                        Telegram::sendMessage([
+                            'chat_id' => $this->message['chat']['id'],
+                            'text' => "{$this->client->first_name}, {$text}",
+                        ]);
+                    }
+                }
+
+                if ($city) {
+                    $this->client->cities()->attach($city->id);
+
+                    $text = "{$name}, запомнили этот город.";
+
+                    Telegram::sendMessage([
+                        'chat_id' => $this->message['chat']['id'],
+                        'text' => "{$this->client->first_name}, {$text}",
+                    ]);
+                }
+            });
+
+        $this->client->state = Client::STATE_COMMAND;
+        $this->client->save();
+    }
+
+    private function getClient(): Client
+    {
         $client = Client::query()
             ->where('ext_id', $this->message['from']['id'])
             ->first();
 
-        if ($client) {
-            $text = 'вы уже с нами!';
-        } else {
+        if (!$client) {
             $client = new Client();
             $client->ext_id = $this->message['from']['id'];
 
-            $text = 'мы рады, что вы теперь с нами!';
+            $this->isNewClient = true;
         }
-
-        Telegram::sendMessage([
-            'chat_id' => $this->message['chat']['id'],
-            'text' => "{$this->message['from']['first_name']}, {$text}",
-        ]);
 
         $client->first_name = $this->message['from']['first_name'];
         $client->last_name = $this->message['from']['last_name'];
         $client->username = $this->message['from']['username'];
         $client->language_code = $this->message['from']['language_code'];
         $client->save();
+
+        return $client;
+    }
+
+    private function commandStartHandler(): void
+    {
+        $text = $this->isNewClient
+            ? 'мы рады, что вы теперь с нами!'
+            : 'вы уже с нами!';
+
+        Telegram::sendMessage([
+            'chat_id' => $this->message['chat']['id'],
+            'text' => "{$this->message['from']['first_name']}, {$text}",
+        ]);
+    }
+
+    private function commandHelpHandler(): void
+    {
+        $text = "Доступные команды:" . PHP_EOL;
+        $text .= '/help' . PHP_EOL;
+        $text .= '/get_weather' . PHP_EOL;
+
+        Telegram::sendMessage([
+            'chat_id' => $this->message['chat']['id'],
+            'text' => $text,
+        ]);
+    }
+
+    private function commandGetWeatherHandler(): void
+    {
+        if ($this->client->cities->isEmpty()) {
+
+            $text = 'у вас пока нет городов, в которых вы хотите видеть погоду.' . PHP_EOL;
+            $text .= 'Напишите город(если несколько то через запятую) в котором хотите ее видеть.';
+
+            Telegram::sendMessage([
+                'chat_id' => $this->message['chat']['id'],
+                'text' => "{$this->client->first_name}, {$text}",
+            ]);
+
+            $this->client->state = Client::STATE_CITIES;
+            $this->client->save();
+        }
     }
 }

@@ -18,21 +18,19 @@ class Weather
         $this->apiKey = config('api.weather.key');
     }
 
-    public function getByCity(string $city)
+    /**
+     * @throws Exception
+     */
+    public function getByName(string $name): mixed
     {
-        [
-            'lat' => $lat,
-            'lon' => $lon,
-        ] = $this->getCoordsByCity($city);
-
-        return $this->getByCoords($lat, $lon);
+        return $this->getByCity($this->getCityByName($name));
     }
 
-    public function getByCoords(string $lat, string $lon)
+    public function getByCity(City $city): mixed
     {
         $response = Http::get(self::WEATHER_API_URL, [
-            'lat' => $lat,
-            'lon' => $lon,
+            'lat' => $city->lat,
+            'lon' => $city->lon,
             'appid' => $this->apiKey,
             'units' => 'metric',
             'lang' => 'ru',
@@ -44,7 +42,7 @@ class Weather
     /**
      * @throws Exception
      */
-    public function getCoordsByCity(string $name): array
+    public function getCityByName(string $name): City
     {
         $city = City::query()
             ->where('name', $name)
@@ -69,9 +67,6 @@ class Weather
             $city->save();
         }
 
-        return [
-            'lat' => $city->lat,
-            'lon' => $city->lon,
-        ];
+        return $city;
     }
 }

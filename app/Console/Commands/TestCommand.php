@@ -27,7 +27,7 @@ class TestCommand extends Command
      */
     public function handle(Weather $weather)
     {
-        $response = Telegram::setWebhook(['url' => 'https://weathercast.ru/telegram/webhook']);
-        dump($response);
+        $coords = $weather->getCityByName('Москваdf');
+        dd($coords);
     }
 }
