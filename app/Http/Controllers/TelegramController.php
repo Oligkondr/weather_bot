@@ -76,7 +76,7 @@ class TelegramController extends Controller
 
                         Telegram::sendMessage([
                             'chat_id' => $this->message['chat']['id'],
-                            'text' => "{$this->client->first_name}, {$text}",
+                            'text' => $text,
                         ]);
                     }
                 }
@@ -88,7 +88,7 @@ class TelegramController extends Controller
 
                     Telegram::sendMessage([
                         'chat_id' => $this->message['chat']['id'],
-                        'text' => "{$this->client->first_name}, {$text}",
+                        'text' => $text,
                     ]);
                 }
             });
