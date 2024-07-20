@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Carbon;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property string $ext_id
@@ -21,6 +21,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property int $is_disable
+ * @property int $state
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\City> $cities
  * @property-read int|null $cities_count
  * @method static Builder|Client newModelQuery()
@@ -33,6 +34,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Client whereIsDisable($value)
  * @method static Builder|Client whereLanguageCode($value)
  * @method static Builder|Client whereLastName($value)
+ * @method static Builder|Client whereState($value)
  * @method static Builder|Client whereUpdatedAt($value)
  * @method static Builder|Client whereUsername($value)
  * @mixin Eloquent

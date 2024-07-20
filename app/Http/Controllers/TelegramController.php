@@ -41,6 +41,7 @@ class TelegramController extends Controller
                     ]);
 
                     $client->state = Client::STATE_CITIES;
+                    $client->save();
                 }
 
                 break;
