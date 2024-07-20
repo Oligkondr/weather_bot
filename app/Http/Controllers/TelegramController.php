@@ -50,10 +50,17 @@ class TelegramController extends Controller
                 $this->commandGetWeatherHandler();
                 break;
 
+            case '/add_city':
+                Telegram::sendMessage([
+                    'chat_id' => $this->message['chat']['id'],
+                    'text' => "{$this->client->first_name}, добавка городов.",
+                ]);
+                break;
+
             default:
                 Telegram::sendMessage([
                     'chat_id' => $this->message['chat']['id'],
-                    'text' => "{$this->message['from']['first_name']}, вы отправили неизвестную команду.",
+                    'text' => "{$this->client->first_name}, вы отправили неизвестную команду.",
                 ]);
         }
     }
@@ -167,6 +174,8 @@ class TelegramController extends Controller
                 'chat_id' => $this->message['chat']['id'],
                 'text' => "Ваши города: {$this->client->cities->implode('name', ', ')}",
             ]);
+
+
         }
     }
 }
