@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Services\Weather;
+use Exception;
 use Illuminate\Console\Command;
 use Telegram\Bot\Laravel\Facades\Telegram;
 
@@ -24,10 +25,11 @@ class TestCommand extends Command
 
     /**
      * Execute the console command.
+     * @throws Exception
      */
     public function handle(Weather $weather)
     {
-        $coords = $weather->getCityByName('Москваdf');
-        dd($coords);
+        $city = $weather->getCityByName('Балашиха');
+        dd($city->toArray());
     }
 }

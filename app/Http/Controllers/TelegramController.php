@@ -72,7 +72,7 @@ class TelegramController extends Controller
                         $city = $this->weather->getCityByName($name);
 
                     } catch (\Exception $e) {
-                        $text = "{$name}, не знаем такого города.";
+                        $text = "\"{$name}\", не знаем такого города.";
 
                         Telegram::sendMessage([
                             'chat_id' => $this->message['chat']['id'],
@@ -147,16 +147,26 @@ class TelegramController extends Controller
     {
         if ($this->client->cities->isEmpty()) {
 
-            $text = 'у вас пока нет городов, в которых вы хотите видеть погоду.' . PHP_EOL;
-            $text .= 'Напишите город(если несколько то через запятую) в котором хотите ее видеть.';
+            $textA = 'у вас пока нет городов, в которых вы хотите видеть погоду.';
+            $textB = 'Напишите город (если несколько то через запятую) в котором хотите ее видеть.';
 
             Telegram::sendMessage([
                 'chat_id' => $this->message['chat']['id'],
-                'text' => "{$this->client->first_name}, {$text}",
+                'text' => "{$this->client->first_name}, {$textA}",
+            ]);
+
+            Telegram::sendMessage([
+                'chat_id' => $this->message['chat']['id'],
+                'text' => "{$this->client->first_name}, {$textB}",
             ]);
 
             $this->client->state = Client::STATE_CITIES;
             $this->client->save();
+        } else {
+            Telegram::sendMessage([
+                'chat_id' => $this->message['chat']['id'],
+                'text' => $this->client->cities,
+            ]);
         }
     }
 }
