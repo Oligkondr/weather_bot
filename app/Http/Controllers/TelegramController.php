@@ -39,6 +39,8 @@ class TelegramController extends Controller
                         'chat_id' => $client->ext_id,
                         'text' => "{$client->first_name}, у вас пока нет городов, в которых вы хотите видеть погоду.",
                     ]);
+
+                    $client->state = Client::STATE_CITIES;
                 }
 
                 break;

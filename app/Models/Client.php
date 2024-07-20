@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Carbon;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $ext_id
@@ -42,6 +42,7 @@ class Client extends Model
     use HasFactory;
 
     public const STATE_COMMAND = 0;
+    public const STATE_CITIES = 1;
 
     public function cities(): BelongsToMany
     {
