@@ -9,13 +9,6 @@ class TelegramController extends Controller
 {
     private array $message;
 
-    public function getClient($id)
-    {
-        return Client::query()
-            ->where('ext_id', $id)
-            ->first();
-    }
-
     public function webhook()
     {
         $this->message = request('message');
@@ -26,18 +19,28 @@ class TelegramController extends Controller
                 break;
 
             case '/help':
+                $text = "Доступные команды:" . PHP_EOL;
+                $text .= '/help' . PHP_EOL;
+                $text .= '/get-weather' . PHP_EOL;
+
                 Telegram::sendMessage([
                     'chat_id' => $this->message['chat']['id'],
-                    'text' => "Пока что есть только команды:" . PHP_EOL . '/help',
+                    'text' => $text,
                 ]);
                 break;
 
-            case '/getweather':
-                $client = $this->getClient($this->message['from']['id']);
-                Telegram::sendMessage([
-                    'chat_id' => $client->ext_id,
-                    'text' => "{$client->first_name}, у вас пока нет городов в которых вы хотите видеть погоду.",
-                ]);
+            case '/get-weather':
+                $client = Client::query()
+                    ->where('ext_id', $this->message['from']['id'])
+                    ->first();
+
+                if ($client->cities->isEmpty()) {
+                    Telegram::sendMessage([
+                        'chat_id' => $client->ext_id,
+                        'text' => "{$client->first_name}, у вас пока нет городов, в которых вы хотите видеть погоду.",
+                    ]);
+                }
+
                 break;
 
             default:
@@ -51,10 +54,9 @@ class TelegramController extends Controller
     private function start()
     {
 
-        $client = $this->getClient($this->message['from']['id']);
-//        $client = Client::query()
-//            ->where('ext_id', $this->message['from']['id'])
-//            ->first();
+        $client = Client::query()
+            ->where('ext_id', $this->message['from']['id'])
+            ->first();
 
         if ($client) {
             $text = 'вы уже с нами!';

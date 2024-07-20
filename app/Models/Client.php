@@ -2,11 +2,15 @@
 
 namespace App\Models;
 
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Carbon;
 
 /**
- *
+ * 
  *
  * @property int $id
  * @property string $ext_id
@@ -14,26 +18,33 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $last_name
  * @property string $username
  * @property string $language_code
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property int $is_disable
- * @method static \Illuminate\Database\Eloquent\Builder|Client newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Client newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Client query()
- * @method static \Illuminate\Database\Eloquent\Builder|Client whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Client whereExtId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Client whereFirstName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Client whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Client whereIsDisable($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Client whereLanguageCode($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Client whereLastName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Client whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Client whereUsername($value)
- * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\City> $cities
+ * @property-read int|null $cities_count
+ * @method static Builder|Client newModelQuery()
+ * @method static Builder|Client newQuery()
+ * @method static Builder|Client query()
+ * @method static Builder|Client whereCreatedAt($value)
+ * @method static Builder|Client whereExtId($value)
+ * @method static Builder|Client whereFirstName($value)
+ * @method static Builder|Client whereId($value)
+ * @method static Builder|Client whereIsDisable($value)
+ * @method static Builder|Client whereLanguageCode($value)
+ * @method static Builder|Client whereLastName($value)
+ * @method static Builder|Client whereUpdatedAt($value)
+ * @method static Builder|Client whereUsername($value)
+ * @mixin Eloquent
  */
 class Client extends Model
 {
     use HasFactory;
 
     public const STATE_COMMAND = 0;
+
+    public function cities(): BelongsToMany
+    {
+        return $this->belongsToMany(City::class);
+    }
 }
