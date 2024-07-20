@@ -165,7 +165,8 @@ class TelegramController extends Controller
         } else {
             Telegram::sendMessage([
                 'chat_id' => $this->message['chat']['id'],
-                'text' => $this->client->cities->implode(', '),
+//                'text' => $this->client->cities->implode(', '),
+                'text' => 'Города клиента',
             ]);
         }
     }
