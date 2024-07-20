@@ -9,6 +9,13 @@ class TelegramController extends Controller
 {
     private array $message;
 
+    public function getClient($id)
+    {
+        return Client::query()
+            ->where('ext_id', $id)
+            ->first();
+    }
+
     public function webhook()
     {
         $this->message = request('message');
@@ -21,8 +28,14 @@ class TelegramController extends Controller
             case '/help':
                 Telegram::sendMessage([
                     'chat_id' => $this->message['chat']['id'],
-                    'text' => "Пока что есть только команды:",
+                    'text' => "Пока что есть только команды:" . PHP_EOL . '/help',
                 ]);
+                break;
+
+            case '/getweather':
+                $client = Client::query()
+                    ->where('ext_id', $this->message['from']['id'])
+                    ->first();
                 break;
 
             default:
@@ -35,9 +48,11 @@ class TelegramController extends Controller
 
     private function start()
     {
-        $client = Client::query()
-            ->where('ext_id', $this->message['from']['id'])
-            ->first();
+
+        $client = $this->getClient($this->message['from']['id']);
+//        $client = Client::query()
+//            ->where('ext_id', $this->message['from']['id'])
+//            ->first();
 
         if ($client) {
             $text = 'вы уже с нами!';
