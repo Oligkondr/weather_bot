@@ -21,17 +21,16 @@ class TelegramController extends Controller
     public function webhook(Weather $weather): void
     {
         \Log::info('request', [request()->all()]);
-        
+
         $this->weather = $weather;
 
         $this->message = request('massage');
-
 
         if (!$this->message) {
             exit();
         }
 
-        \Log::info('request', $this->message);
+//        \Log::info('request', $this->message);
 
         $this->client = $this->getClient();
 
