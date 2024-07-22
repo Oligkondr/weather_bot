@@ -146,6 +146,8 @@ class TelegramController extends Controller
             'text' => 'Удаление',
         ]);
 
+        $this->client->state = Client::STATE_COMMAND;
+        $this->client->save();
     }
 
     private function getClient(): Client
