@@ -120,6 +120,7 @@ class TelegramController extends Controller
         Telegram::sendMessage([
             'chat_id' => $this->message['chat']['id'],
             'text' => 'Город были удален.',
+            'reply_markup' => Keyboard::remove(['selective' => false]),
         ]);
 
         $this->client->state = Client::STATE_COMMAND;
@@ -237,7 +238,7 @@ class TelegramController extends Controller
 
         Telegram::sendMessage([
             'chat_id' => $this->message['chat']['id'],
-            'text' => "{$this->client->first_name}, в каком городу вы больше не хотите видеть погоду?",
+            'text' => "{$this->client->first_name}, в каком городе вы больше не хотите видеть погоду?",
             'reply_markup' => $replyMarkup,
         ]);
     }
