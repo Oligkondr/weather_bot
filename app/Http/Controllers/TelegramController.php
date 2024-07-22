@@ -115,35 +115,9 @@ class TelegramController extends Controller
 
     private function deleteCityHandler(): void
     {
-//        $cities = $this->client->cities;
-//        $cities = ['Москва', 'Пермь'];
-//
-//        $replyMarkup = Keyboard::make()
-//            ->setResizeKeyboard(true)
-//            ->setOneTimeKeyboard(true);
-//
-//        foreach ($cities as $city) {
-//            $replyMarkup->row([
-//                Keyboard::button($city),
-//            ]);
-//        }
-//
-//        $replyMarkup->row([
-//            Keyboard::button('Отмена'),
-//        ]);
-//
-//        Telegram::sendMessage([
-//            'chat_id' => $this->message['chat']['id'],
-//            'text' => 'Test',
-//            'reply_markup' => $replyMarkup,
-//        ]);
-//
-//        $this->client->state = Client::STATE_COMMAND;
-//        $this->client->save();
-
         Telegram::sendMessage([
             'chat_id' => $this->message['chat']['id'],
-            'text' => 'Удаление',
+            'text' => 'Города были удалены.',
         ]);
 
         $this->client->state = Client::STATE_COMMAND;
@@ -247,6 +221,29 @@ class TelegramController extends Controller
 
         $this->client->state = Client::STATE_DELETE_CITY;
         $this->client->save();
+
+//        $cities = $this->client->cities;
+        $cities = ['Москва', 'Пермь'];
+
+        $replyMarkup = Keyboard::make()
+            ->setResizeKeyboard(true)
+            ->setOneTimeKeyboard(true);
+
+        foreach ($cities as $city) {
+            $replyMarkup->row([
+                Keyboard::button($city),
+            ]);
+        }
+
+        $replyMarkup->row([
+            Keyboard::button('Отмена'),
+        ]);
+
+        Telegram::sendMessage([
+            'chat_id' => $this->message['chat']['id'],
+            'text' => 'Test',
+            'reply_markup' => $replyMarkup,
+        ]);
     }
 
     private function commandTestHandler(): void
