@@ -219,7 +219,7 @@ class TelegramController extends Controller
 
     private function commandTestHandler(): void
     {
-        $ci = ['Москва', 'Пер','Мер',];
+        $ci = ['Москва', 'Пер', 'Мер',];
 
         $replyMarkup = Keyboard::make()
             ->setResizeKeyboard(true)
@@ -227,14 +227,18 @@ class TelegramController extends Controller
 
         foreach ($ci as $sc) {
             $replyMarkup->row([
-                    Keyboard::button($sc),
-                ]);
+                Keyboard::button($sc),
+            ]);
         }
+
+        $replyMarkup->row([
+            Keyboard::button('Отмена'),
+        ]);
 
         Telegram::sendMessage([
             'chat_id' => $this->message['chat']['id'],
             'text' => 'Test',
-            'reply_markup' => $replyMarkup
+            'reply_markup' => $replyMarkup,
         ]);
     }
 }
