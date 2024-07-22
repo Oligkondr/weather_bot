@@ -54,6 +54,10 @@ class TelegramController extends Controller
                 $this->commandAddCityHandler();
                 break;
 
+            case '/delete_city':
+                $this->commandDeleteCityHandler();
+                break;
+
             default:
                 Telegram::sendMessage([
                     'chat_id' => $this->message['chat']['id'],
@@ -186,5 +190,13 @@ class TelegramController extends Controller
 
         $this->client->state = Client::STATE_CITIES;
         $this->client->save();
+    }
+
+    private function commandDeleteCityHandler()
+    {
+        Telegram::sendMessage([
+            'chat_id' => $this->message['chat']['id'],
+            'text' => "{$this->client->first_name}, в каких городах вы больше не хотите видеть погоду?",
+        ]);
     }
 }
