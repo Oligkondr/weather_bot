@@ -138,9 +138,9 @@ class TelegramController extends Controller
     private function commandHelpHandler(): void
     {
         $text = "Доступные команды:" . PHP_EOL;
-        $text .= '/help' . PHP_EOL;
-        $text .= '/get_weather' . PHP_EOL;
-        $text .= '/add_city' . PHP_EOL;
+        $text .= '/help - показывает доступные команды и их описание' . PHP_EOL;
+        $text .= '/get_weather - показывает погоду в выбранных городах' . PHP_EOL;
+        $text .= '/add_city - добавляет новые города' . PHP_EOL;
 
         Telegram::sendMessage([
             'chat_id' => $this->message['chat']['id'],
