@@ -29,8 +29,11 @@ class TelegramController extends Controller
             case Client::STATE_COMMAND:
                 $this->commandHandler();
                 break;
-            case Client::STATE_CITIES:
-                $this->citiesHandler();
+            case Client::STATE_ADD_CITY:
+                $this->addCityHandler();
+                break;
+            case Client::STATE_DELETE_CITY:
+                $this->deleteCityHandler();
                 break;
         }
     }
@@ -58,6 +61,10 @@ class TelegramController extends Controller
                 $this->commandDeleteCityHandler();
                 break;
 
+            case '/test':
+                $this->commandTestHandler();
+                break;
+
             default:
                 Telegram::sendMessage([
                     'chat_id' => $this->message['chat']['id'],
@@ -66,12 +73,7 @@ class TelegramController extends Controller
         }
     }
 
-    private function citiesHandler(): void
-    {
-        $this->saveNewCity();
-    }
-
-    private function saveNewCity(): void
+    private function addCityHandler(): void
     {
         collect(explode(",", $this->message['text']))
             ->each(function (string $name) {
@@ -108,6 +110,11 @@ class TelegramController extends Controller
 
         $this->client->state = Client::STATE_COMMAND;
         $this->client->save();
+    }
+
+    private function deleteCityHandler()
+    {
+
     }
 
     private function getClient(): Client
@@ -175,7 +182,7 @@ class TelegramController extends Controller
                 'text' => "{$this->client->first_name}, {$textB}",
             ]);
 
-            $this->client->state = Client::STATE_CITIES;
+            $this->client->state = Client::STATE_ADD_CITY;
             $this->client->save();
         } else {
             Telegram::sendMessage([
@@ -194,15 +201,26 @@ class TelegramController extends Controller
             'text' => "{$this->client->first_name}, в каких еще городах хотите видеть погоду?",
         ]);
 
-        $this->client->state = Client::STATE_CITIES;
+        $this->client->state = Client::STATE_ADD_CITY;
         $this->client->save();
     }
 
-    private function commandDeleteCityHandler()
+    private function commandDeleteCityHandler(): void
     {
         Telegram::sendMessage([
             'chat_id' => $this->message['chat']['id'],
             'text' => "{$this->client->first_name}, в каких городах вы больше не хотите видеть погоду?",
+        ]);
+
+        $this->client->state = Client::STATE_DELETE_CITY;
+        $this->client->save();
+    }
+
+    private function commandTestHandler(): void
+    {
+        Telegram::sendMessage([
+            'chat_id' => $this->message['chat']['id'],
+            'text' => "Test",
         ]);
     }
 }
