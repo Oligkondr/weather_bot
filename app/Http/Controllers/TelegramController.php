@@ -115,6 +115,25 @@ class TelegramController extends Controller
 
     private function deleteCityHandler()
     {
+        $replyMarkup = Keyboard::make()
+            ->setResizeKeyboard(true)
+            ->setOneTimeKeyboard(true);
+
+        foreach ($this->client->cities as $city) {
+            $replyMarkup->row([
+                Keyboard::button($city->name),
+            ]);
+        }
+
+        $replyMarkup->row([
+            Keyboard::button('Отмена'),
+        ]);
+
+        Telegram::sendMessage([
+            'chat_id' => $this->message['chat']['id'],
+            'text' => 'Test',
+            'reply_markup' => $replyMarkup,
+        ]);
 
     }
 
