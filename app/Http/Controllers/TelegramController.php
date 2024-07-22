@@ -22,9 +22,13 @@ class TelegramController extends Controller
     {
         $this->weather = $weather;
 
-        $this->message = request('message');
+        $this->message = request('massage');
 
-        \Log::info(print_r(request(), true));
+        if (!$this->message) {
+            exit();
+        }
+
+        \Log::info('request', $this->message);
 
         $this->client = $this->getClient();
 
