@@ -10,7 +10,7 @@ use Telegram\Bot\Laravel\Facades\Telegram;
 
 class TelegramController extends Controller
 {
-    private array $message;
+    private ?array $message;
 
     private ?Client $client;
 
