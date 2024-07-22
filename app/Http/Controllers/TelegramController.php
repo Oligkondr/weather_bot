@@ -150,6 +150,9 @@ class TelegramController extends Controller
 
     private function commandAddCityHandler()
     {
+        $this->client->state = Client::STATE_CITIES;
+        $this->client->save();
+
         $this->saveNewCity();
     }
 
