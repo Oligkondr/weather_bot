@@ -53,7 +53,7 @@ class TelegramController extends Controller
             case '/add_city':
                 Telegram::sendMessage([
                     'chat_id' => $this->message['chat']['id'],
-                    'text' => "{$this->client->first_name}, в каких еще городах хотите видеть погоду?.",
+                    'text' => "{$this->client->first_name}, в каких еще городах хотите видеть погоду?",
                 ]);
 
                 $this->commandAddCityHandler();
@@ -148,7 +148,7 @@ class TelegramController extends Controller
         }
     }
 
-    private function commandAddCityHandler()
+    private function commandAddCityHandler(): void
     {
         $this->client->state = Client::STATE_CITIES;
         $this->client->save();
