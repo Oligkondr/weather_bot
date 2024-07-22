@@ -214,16 +214,10 @@ class TelegramController extends Controller
 
     private function commandDeleteCityHandler(): void
     {
-        Telegram::sendMessage([
-            'chat_id' => $this->message['chat']['id'],
-            'text' => "{$this->client->first_name}, в каких городах вы больше не хотите видеть погоду?",
-        ]);
-
         $this->client->state = Client::STATE_DELETE_CITY;
         $this->client->save();
 
-//        $cities = $this->client->cities;
-        $cities = ['Москва', 'Пермь'];
+        $cities = $this->client->cities;
 
         $replyMarkup = Keyboard::make()
             ->setResizeKeyboard(true)
@@ -241,7 +235,7 @@ class TelegramController extends Controller
 
         Telegram::sendMessage([
             'chat_id' => $this->message['chat']['id'],
-            'text' => 'Test',
+            'text' => "{$this->client->first_name}, в каких городах вы больше не хотите видеть погоду?",
             'reply_markup' => $replyMarkup,
         ]);
     }
