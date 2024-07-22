@@ -24,6 +24,8 @@ class TelegramController extends Controller
 
         $this->message = request('message');
 
+        \Log::info(print_r(request(), true));
+
         $this->client = $this->getClient();
 
         switch ($this->client->state) {
