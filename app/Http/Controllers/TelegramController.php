@@ -219,42 +219,17 @@ class TelegramController extends Controller
 
     private function commandTestHandler(): void
     {
+        $ci = ['Москва', 'Пер','Мер',];
+
         $replyMarkup = Keyboard::make()
             ->setResizeKeyboard(true)
-            ->setOneTimeKeyboard(true)
-            ->row([
-                Keyboard::button('1'),
-                Keyboard::button('2'),
-                Keyboard::button('3'),
-            ])
-            ->row([
-                Keyboard::button('4'),
-                Keyboard::button('5'),
-                Keyboard::button('6'),
-            ])
-            ->row([
-                Keyboard::button('7'),
-                Keyboard::button('8'),
-                Keyboard::button('9'),
-            ])
-            ->row([
-                Keyboard::button('7'),
-                Keyboard::button('8'),
-                Keyboard::button('9'),
-            ])
-            ->row([
-                Keyboard::button('7'),
-                Keyboard::button('8'),
-                Keyboard::button('9'),
-            ])
-            ->row([
-                Keyboard::button('7'),
-                Keyboard::button('8'),
-                Keyboard::button('9'),
-            ])
-            ->row([
-                Keyboard::button('0'),
-            ]);
+            ->setOneTimeKeyboard(true);
+
+        foreach ($ci as $sc) {
+            $replyMarkup->row([
+                    Keyboard::button($sc),
+                ]);
+        }
 
         Telegram::sendMessage([
             'chat_id' => $this->message['chat']['id'],
