@@ -238,6 +238,21 @@ class TelegramController extends Controller
                 Keyboard::button('9'),
             ])
             ->row([
+                Keyboard::button('7'),
+                Keyboard::button('8'),
+                Keyboard::button('9'),
+            ])
+            ->row([
+                Keyboard::button('7'),
+                Keyboard::button('8'),
+                Keyboard::button('9'),
+            ])
+            ->row([
+                Keyboard::button('7'),
+                Keyboard::button('8'),
+                Keyboard::button('9'),
+            ])
+            ->row([
                 Keyboard::button('0'),
             ]);
 
