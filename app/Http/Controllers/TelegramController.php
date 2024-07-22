@@ -225,7 +225,7 @@ class TelegramController extends Controller
 
         foreach ($cities as $city) {
             $replyMarkup->row([
-                Keyboard::button($city),
+                Keyboard::button($city->name),
             ]);
         }
 
