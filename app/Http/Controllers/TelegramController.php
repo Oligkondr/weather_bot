@@ -51,11 +51,6 @@ class TelegramController extends Controller
                 break;
 
             case '/add_city':
-                Telegram::sendMessage([
-                    'chat_id' => $this->message['chat']['id'],
-                    'text' => "{$this->client->first_name}, в каких еще городах хотите видеть погоду?",
-                ]);
-
                 $this->commandAddCityHandler();
                 break;
 
@@ -69,7 +64,41 @@ class TelegramController extends Controller
 
     private function citiesHandler(): void
     {
-        $this->saveNewCity();
+        collect(explode(",", $this->message['text']))
+            ->each(function (string $name) {
+                $name = trim($name);
+                $city = City::query()
+                    ->where('name', 'like', $name)
+                    ->first();
+
+                if (!$city) {
+                    try {
+                        $city = $this->weather->getCityByName($name);
+
+                    } catch (\Exception $e) {
+                        $text = "\"{$name}\", не знаем такого города.";
+
+                        Telegram::sendMessage([
+                            'chat_id' => $this->message['chat']['id'],
+                            'text' => $text,
+                        ]);
+                    }
+                }
+
+                if ($city) {
+                    $this->client->cities()->attach($city->id);
+
+                    $text = "{$name}, запомнили этот город.";
+
+                    Telegram::sendMessage([
+                        'chat_id' => $this->message['chat']['id'],
+                        'text' => $text,
+                    ]);
+                }
+            });
+
+        $this->client->state = Client::STATE_COMMAND;
+        $this->client->save();
     }
 
     private function getClient(): Client
@@ -150,48 +179,12 @@ class TelegramController extends Controller
 
     private function commandAddCityHandler(): void
     {
+        Telegram::sendMessage([
+            'chat_id' => $this->message['chat']['id'],
+            'text' => "{$this->client->first_name}, в каких еще городах хотите видеть погоду?",
+        ]);
+
         $this->client->state = Client::STATE_CITIES;
-        $this->client->save();
-
-        $this->saveNewCity();
-    }
-
-    private function saveNewCity(): void
-    {
-        collect(explode(",", $this->message['text']))
-            ->each(function (string $name) {
-                $name = trim($name);
-                $city = City::query()
-                    ->where('name', 'like', $name)
-                    ->first();
-
-                if (!$city) {
-                    try {
-                        $city = $this->weather->getCityByName($name);
-
-                    } catch (\Exception $e) {
-                        $text = "\"{$name}\", не знаем такого города.";
-
-                        Telegram::sendMessage([
-                            'chat_id' => $this->message['chat']['id'],
-                            'text' => $text,
-                        ]);
-                    }
-                }
-
-                if ($city) {
-                    $this->client->cities()->attach($city->id);
-
-                    $text = "{$name}, запомнили этот город.";
-
-                    Telegram::sendMessage([
-                        'chat_id' => $this->message['chat']['id'],
-                        'text' => $text,
-                    ]);
-                }
-            });
-
-        $this->client->state = Client::STATE_COMMAND;
         $this->client->save();
     }
 }
