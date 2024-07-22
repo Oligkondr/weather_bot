@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\City;
 use App\Models\Client;
 use App\Services\Weather;
+use Telegram\Bot\Keyboard\Keyboard;
 use Telegram\Bot\Laravel\Facades\Telegram;
 
 class TelegramController extends Controller
@@ -218,9 +219,32 @@ class TelegramController extends Controller
 
     private function commandTestHandler(): void
     {
+        $replyMarkup = Keyboard::make()
+            ->setResizeKeyboard(true)
+            ->setOneTimeKeyboard(true)
+            ->row([
+                Keyboard::button('1'),
+                Keyboard::button('2'),
+                Keyboard::button('3'),
+            ])
+            ->row([
+                Keyboard::button('4'),
+                Keyboard::button('5'),
+                Keyboard::button('6'),
+            ])
+            ->row([
+                Keyboard::button('7'),
+                Keyboard::button('8'),
+                Keyboard::button('9'),
+            ])
+            ->row([
+                Keyboard::button('0'),
+            ]);
+
         Telegram::sendMessage([
             'chat_id' => $this->message['chat']['id'],
-            'text' => "Test",
+            'text' => 'Test',
+            'reply_markup' => $replyMarkup
         ]);
     }
 }
