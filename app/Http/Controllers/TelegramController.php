@@ -68,6 +68,11 @@ class TelegramController extends Controller
 
     private function citiesHandler(): void
     {
+        $this->saveNewCity();
+    }
+
+    private function saveNewCity(): void
+    {
         collect(explode(",", $this->message['text']))
             ->each(function (string $name) {
                 $name = trim($name);
