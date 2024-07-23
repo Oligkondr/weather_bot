@@ -27,7 +27,7 @@ class TelegramController extends Controller
 
         $this->message = request('message');
 
-        if ($this->message && $this->message['text'] ?? false) {
+        if ($this->message && array_key_exists('text', $this->message)) {
 
             $this->client = $this->getClient();
 
