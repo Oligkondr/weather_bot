@@ -85,8 +85,11 @@ class TelegramController extends Controller
                         'text' => "{$this->client->first_name}, вы отправили неизвестную команду.",
                     ]);
             }
-        } else {
-            exit();
+        } elseif ($this->message['sticker']) {
+            Telegram::sendMessage([
+                'chat_id' => $this->message['chat']['id'],
+                'text' => "{$this->client->first_name}, вы отправили неизвестную команду.",
+            ]);
         }
     }
 
