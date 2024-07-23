@@ -123,9 +123,6 @@ class TelegramController extends Controller
 
     private function deleteCityHandler(): void
     {
-        $this->client->state = Client::STATE_COMMAND;
-        $this->client->save();
-
         $name = $this->message['text'];
 
         $city = City::query()
@@ -152,6 +149,9 @@ class TelegramController extends Controller
                 'reply_markup' => Keyboard::remove(['selective' => false]),
             ]);
         }
+
+        $this->client->state = Client::STATE_COMMAND;
+        $this->client->save();
     }
 
     private function getClient(): Client
