@@ -44,12 +44,12 @@ class TelegramController extends Controller
             } elseif (array_key_exists('sticker', $this->message)) {
                 Telegram::sendMessage([
                     'chat_id' => $this->message['chat']['id'],
-                    'text' => 'Мне не нравятся стикеры.',
+                    'text' => 'Стикер конечно хороший, но я с ними не работаю.',
                 ]);
             } else {
                 Telegram::sendMessage([
                     'chat_id' => $this->message['chat']['id'],
-                    'text' => 'Я не понимаю.',
+                    'text' => "{$this->commandHelpHandler()}",
                 ]);
             }
         }
