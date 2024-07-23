@@ -23,6 +23,13 @@ class TelegramController extends Controller
 
     public function webhook(Weather $weather): JsonResponse
     {
+
+        $updates = Telegram::getWebhookUpdate();
+
+        \Log::info('update', [$updates]);
+
+        exit();
+
         $this->weather = $weather;
 
         $this->message = request('message');
