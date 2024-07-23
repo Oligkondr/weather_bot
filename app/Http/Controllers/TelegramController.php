@@ -218,10 +218,21 @@ class TelegramController extends Controller
             $this->client->state = Client::STATE_ADD_CITY;
             $this->client->save();
         } else {
+            $cities = $this->client->cities;
+
             Telegram::sendMessage([
                 'chat_id' => $this->message['chat']['id'],
                 'text' => "Ваши города: {$this->client->cities->implode('name', ', ')}",
             ]);
+
+            foreach ($cities as $city) {
+                $response = $this->weather->getByCity($city);
+
+                Telegram::sendMessage([
+                    'chat_id' => $this->message['chat']['id'],
+                    'text' => "{$response['weather']['description']}",
+                ]);
+            }
         }
     }
 

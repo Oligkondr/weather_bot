@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\City;
 use App\Services\Weather;
 use Exception;
 use Illuminate\Console\Command;
@@ -29,6 +30,7 @@ class TestCommand extends Command
      */
     public function handle(Weather $weather)
     {
-        Telegram::setWebhook(['url' => 'https://weathercast.ru/telegram/webhook']);
+        $city = City::find(1);
+        dd($weather->getByCity($city));
     }
 }
