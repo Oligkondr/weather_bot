@@ -230,7 +230,7 @@ class TelegramController extends Controller
 
                 Telegram::sendMessage([
                     'chat_id' => $this->message['chat']['id'],
-                    'text' => "{$response['weather']['description']}",
+                    'text' => "{$response['weather'][0]['description']}",
                 ]);
             }
         }
