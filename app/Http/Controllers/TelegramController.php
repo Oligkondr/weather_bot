@@ -49,7 +49,7 @@ class TelegramController extends Controller
             } else {
                 Telegram::sendMessage([
                     'chat_id' => $this->message['chat']['id'],
-                    'text' => "{$this->commandHelpHandler()}",
+                    'text' => 'Я не понимаю.',
                 ]);
             }
         }
