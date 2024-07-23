@@ -231,7 +231,7 @@ class TelegramController extends Controller
 
                 $text = "{$response['name']}:" . PHP_EOL;
                 $text .= ' ' . PHP_EOL;
-                $text .= "Температура: {$response['main']['temp']}" . PHP_EOL;
+                $text .= "Температура: {$response['main']['temp']} °C" . PHP_EOL;
                 $text .= "{$response['weather'][0]['description']}" . PHP_EOL;
                 $text .= "Скорость ветра: {$response['wind']['speed']} м/c" . PHP_EOL;
 
