@@ -123,20 +123,30 @@ class TelegramController extends Controller
 
     private function deleteCityHandler(): void
     {
-        $city = City::query()
-            ->where('name', 'like', $this->message['text'])
-            ->first();
-
-        $this->client->cities()->detach($city->id);
-
-        Telegram::sendMessage([
-            'chat_id' => $this->message['chat']['id'],
-            'text' => 'Город были удален.',
-            'reply_markup' => Keyboard::remove(['selective' => false]),
-        ]);
-
         $this->client->state = Client::STATE_COMMAND;
         $this->client->save();
+
+        $name = $this->message['text'];
+
+        $city = City::query()
+            ->where('name', 'like', $name)
+            ->first();
+
+        if ($city) {
+            $this->client->cities()->detach($city->id);
+
+            Telegram::sendMessage([
+                'chat_id' => $this->message['chat']['id'],
+                'text' => 'Город были удален.',
+                'reply_markup' => Keyboard::remove(['selective' => false]),
+            ]);
+        } elseif ($name != 'Отмена'){
+            Telegram::sendMessage([
+                'chat_id' => $this->message['chat']['id'],
+                'text' => "Город \"{$name}\" не найден.",
+                'reply_markup' => Keyboard::remove(['selective' => false]),
+            ]);
+        }
     }
 
     private function getClient(): Client
@@ -215,7 +225,7 @@ class TelegramController extends Controller
         }
     }
 
-    private function commandShowCityHandler()
+    private function commandShowCityHandler(): void
     {
         $text = $this->client->cities->isNotEmpty()
             ? "ваши города: {$this->client->cities->implode('name', ', ')}"
