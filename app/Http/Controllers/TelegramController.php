@@ -212,38 +212,19 @@ class TelegramController extends Controller
                 'chat_id' => $this->message['chat']['id'],
                 'text' => "Ваши города: {$this->client->cities->implode('name', ', ')}",
             ]);
-
-
         }
     }
 
     private function commandShowCityHandler()
     {
-        if ($this->client->cities->isEmpty()) {
+        $text = $this->client->cities->isNotEmpty()
+            ? "ваши города: {$this->client->cities->implode('name', ', ')}"
+            : 'у вас пока нет городов, в которых вы хотите видеть погоду.';
 
-            $textA = 'у вас пока нет городов, в которых вы хотите видеть погоду.';
-            $textB = 'Напишите город (если несколько то через запятую) в котором хотите ее видеть.';
-
-            Telegram::sendMessage([
-                'chat_id' => $this->message['chat']['id'],
-                'text' => "{$this->client->first_name}, {$textA}",
-            ]);
-
-            Telegram::sendMessage([
-                'chat_id' => $this->message['chat']['id'],
-                'text' => "{$this->client->first_name}, {$textB}",
-            ]);
-
-            $this->client->state = Client::STATE_ADD_CITY;
-            $this->client->save();
-        } else {
-            Telegram::sendMessage([
-                'chat_id' => $this->message['chat']['id'],
-                'text' => "Ваши города: {$this->client->cities->implode('name', ', ')}",
-            ]);
-
-
-        }
+        Telegram::sendMessage([
+            'chat_id' => $this->message['chat']['id'],
+            'text' => "{$this->client->first_name}, {$text}",
+        ]);
     }
 
     private function commandAddCityHandler(): void
