@@ -13,7 +13,7 @@ use Telegram\Bot\Laravel\Facades\Telegram;
 
 class TelegramController extends Controller
 {
-    private ?array $message;
+    private $message;
 
     private ?Client $client;
 
@@ -23,18 +23,15 @@ class TelegramController extends Controller
 
     public function webhook(Weather $weather): JsonResponse
     {
-
-        $updates = Telegram::getWebhookUpdate();
-
-        \Log::info('update', [$updates]);
-
-        exit();
-
         $this->weather = $weather;
 
-        $this->message = request('message');
+        $updates = Telegram::getWebhookUpdate();
+        $this->message = $updates->message;
+
+        \Log::info('mas', [$this->message]);
+
         if ($this->message) {
-            if (array_key_exists('text', $this->message)) {
+            if ($this->message->text) {
 
                 $this->client = $this->getClient();
 
@@ -51,7 +48,7 @@ class TelegramController extends Controller
                 }
             } else {
                 Telegram::sendMessage([
-                    'chat_id' => $this->message['chat']['id'],
+                    'chat_id' => $this->message->chat->id,
                     'text' => 'Я не понимаю.',
                 ]);
 
@@ -66,7 +63,7 @@ class TelegramController extends Controller
 
     private function commandHandler(): void
     {
-        switch ($this->message['text']) {
+        switch ($this->message->text) {
             case '/start':
                 $this->commandStartHandler();
                 break;
@@ -97,7 +94,7 @@ class TelegramController extends Controller
 
             default:
                 Telegram::sendMessage([
-                    'chat_id' => $this->message['chat']['id'],
+                    'chat_id' => $this->message->chat,
                     'text' => "{$this->client->first_name}, вы отправили неизвестную команду.",
                 ]);
         }
@@ -120,7 +117,7 @@ class TelegramController extends Controller
                         $text = "\"{$name}\", не знаем такого города.";
 
                         Telegram::sendMessage([
-                            'chat_id' => $this->message['chat']['id'],
+                            'chat_id' => $this->message->chat->id,
                             'text' => $text,
                         ]);
                     }
@@ -132,7 +129,7 @@ class TelegramController extends Controller
                     $text = "{$name}, запомнили этот город.";
 
                     Telegram::sendMessage([
-                        'chat_id' => $this->message['chat']['id'],
+                        'chat_id' => $this->message->chat->id,
                         'text' => $text,
                     ]);
                 }
@@ -154,19 +151,19 @@ class TelegramController extends Controller
             $this->client->cities()->detach($city->id);
 
             Telegram::sendMessage([
-                'chat_id' => $this->message['chat']['id'],
+                'chat_id' => $this->message->chat->id,
                 'text' => 'Город были удален.',
                 'reply_markup' => Keyboard::remove(['selective' => false]),
             ]);
         } elseif ($name != 'Отмена') {
             Telegram::sendMessage([
-                'chat_id' => $this->message['chat']['id'],
+                'chat_id' => $this->message->chat->id,
                 'text' => "Город \"{$name}\" не найден.",
                 'reply_markup' => Keyboard::remove(['selective' => false]),
             ]);
         } else {
             Telegram::sendMessage([
-                'chat_id' => $this->message['chat']['id'],
+                'chat_id' => $this->message->chat->id,
                 'text' => "Передумали удалять города.",
                 'reply_markup' => Keyboard::remove(['selective' => false]),
             ]);
@@ -205,7 +202,7 @@ class TelegramController extends Controller
             : 'вы уже с нами!';
 
         Telegram::sendMessage([
-            'chat_id' => $this->message['chat']['id'],
+            'chat_id' => $this->message->chat->id,
             'text' => "{$this->message['from']['first_name']}, {$text}",
         ]);
     }
@@ -220,7 +217,7 @@ class TelegramController extends Controller
         $text .= '/show_city - показывает выбранные города' . PHP_EOL;
 
         Telegram::sendMessage([
-            'chat_id' => $this->message['chat']['id'],
+            'chat_id' => $this->message->chat->id,
             'text' => $text,
         ]);
     }
@@ -233,12 +230,12 @@ class TelegramController extends Controller
             $textB = 'Напишите город (если несколько то через запятую) в котором хотите ее видеть.';
 
             Telegram::sendMessage([
-                'chat_id' => $this->message['chat']['id'],
+                'chat_id' => $this->message->chat->id,
                 'text' => "{$this->client->first_name}, {$textA}",
             ]);
 
             Telegram::sendMessage([
-                'chat_id' => $this->message['chat']['id'],
+                'chat_id' => $this->message->chat->id,
                 'text' => "{$this->client->first_name}, {$textB}",
             ]);
 
@@ -256,7 +253,7 @@ class TelegramController extends Controller
                 $text .= "Скорость ветра: {$response['wind']['speed']} м/c" . PHP_EOL;
 
                 Telegram::sendMessage([
-                    'chat_id' => $this->message['chat']['id'],
+                    'chat_id' => $this->message->chat->id,
                     'text' => $text,
                 ]);
             }
@@ -270,7 +267,7 @@ class TelegramController extends Controller
             : 'у вас пока нет городов, в которых вы хотите видеть погоду.';
 
         Telegram::sendMessage([
-            'chat_id' => $this->message['chat']['id'],
+            'chat_id' => $this->message->chat->id,
             'text' => "{$this->client->first_name}, {$text}",
         ]);
     }
@@ -278,7 +275,7 @@ class TelegramController extends Controller
     private function commandAddCityHandler(): void
     {
         Telegram::sendMessage([
-            'chat_id' => $this->message['chat']['id'],
+            'chat_id' => $this->message->chat->id,
             'text' => "{$this->client->first_name}, в каких еще городах хотите видеть погоду?",
         ]);
 
@@ -308,7 +305,7 @@ class TelegramController extends Controller
         ]);
 
         Telegram::sendMessage([
-            'chat_id' => $this->message['chat']['id'],
+            'chat_id' => $this->message->chat->id,
             'text' => "{$this->client->first_name}, в каком городе вы больше не хотите видеть погоду?",
             'reply_markup' => $replyMarkup,
         ]);
@@ -333,7 +330,7 @@ class TelegramController extends Controller
         ]);
 
         Telegram::sendMessage([
-            'chat_id' => $this->message['chat']['id'],
+            'chat_id' => $this->message->chat->id,
             'text' => 'Test',
             'reply_markup' => $replyMarkup,
         ]);
