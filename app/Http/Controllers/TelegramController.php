@@ -51,6 +51,8 @@ class TelegramController extends Controller
                     'chat_id' => $this->message['chat']['id'],
                     'text' => 'Я не понимаю.',
                 ]);
+
+                $this->commandHelpHandler();
             }
         }
 
