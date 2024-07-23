@@ -27,11 +27,11 @@ class TelegramController extends Controller
         $this->message = request('massage');
 
         $res = Telegram::sendMessage([
-            'chat_id' => $this->message['chat']['id'],
+            'chat_id' => 1747220365,
             'text' => 'test',
         ]);
 
-        \Log::info('request', [$res]);
+        \Log::info('request2', [$res]);
 
         exit();
 
