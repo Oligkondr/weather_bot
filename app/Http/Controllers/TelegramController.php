@@ -229,10 +229,10 @@ class TelegramController extends Controller
             foreach ($cities as $city) {
                 $response = $this->weather->getByCity($city);
 
-                $text = "Город: {$response['name']}" . PHP_EOL;
+                $text = "{$response['name']}:" . PHP_EOL;
                 $text .= "Температура: {$response['main']['temp']}" . PHP_EOL;
                 $text .= "{$response['weather'][0]['description']}" . PHP_EOL;
-                $text .= "Скорость ветра: {$response['wind']['speed']}" . PHP_EOL;
+                $text .= "Скорость ветра: {$response['wind']['speed']} м/c" . PHP_EOL;
 
                 Telegram::sendMessage([
                     'chat_id' => $this->message['chat']['id'],
