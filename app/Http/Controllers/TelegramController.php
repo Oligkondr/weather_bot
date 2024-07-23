@@ -226,17 +226,17 @@ class TelegramController extends Controller
         } else {
             $cities = $this->client->cities;
 
-            Telegram::sendMessage([
-                'chat_id' => $this->message['chat']['id'],
-                'text' => "Ваши города: {$this->client->cities->implode('name', ', ')}",
-            ]);
-
             foreach ($cities as $city) {
                 $response = $this->weather->getByCity($city);
 
+                $text = "Город: {$response['name']}" . PHP_EOL;
+                $text .= "Температура: {$response['main']['temp']}" . PHP_EOL;
+                $text .= "{$response['weather'][0]['description']}" . PHP_EOL;
+                $text .= "Скорость ветра: {$response['wind']['speed']}" . PHP_EOL;
+
                 Telegram::sendMessage([
                     'chat_id' => $this->message['chat']['id'],
-                    'text' => "{$response['weather'][0]['description']}",
+                    'text' => $text,
                 ]);
             }
         }
