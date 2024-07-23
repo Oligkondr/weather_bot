@@ -230,6 +230,7 @@ class TelegramController extends Controller
                 $response = $this->weather->getByCity($city);
 
                 $text = "{$response['name']}:" . PHP_EOL;
+                $text .= ' ' . PHP_EOL;
                 $text .= "Температура: {$response['main']['temp']}" . PHP_EOL;
                 $text .= "{$response['weather'][0]['description']}" . PHP_EOL;
                 $text .= "Скорость ветра: {$response['wind']['speed']} м/c" . PHP_EOL;
