@@ -146,6 +146,11 @@ class TelegramController extends Controller
                 'text' => "Город \"{$name}\" не найден.",
                 'reply_markup' => Keyboard::remove(['selective' => false]),
             ]);
+        } else {
+            Telegram::sendMessage([
+                'chat_id' => $this->message['chat']['id'],
+                'reply_markup' => Keyboard::remove(['selective' => false]),
+            ]);
         }
     }
 
