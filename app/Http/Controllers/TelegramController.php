@@ -7,7 +7,6 @@ use App\Models\Client;
 use App\Services\Weather;
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Log;
 use Telegram\Bot\Keyboard\Keyboard;
 use Telegram\Bot\Laravel\Facades\Telegram;
 
@@ -26,21 +25,32 @@ class TelegramController extends Controller
         $this->weather = $weather;
 
         $this->message = request('message');
+        if ($this->message) {
+            if (array_key_exists('text', $this->message)) {
 
-        if ($this->message && array_key_exists('text', $this->message)) {
+                $this->client = $this->getClient();
 
-            $this->client = $this->getClient();
-
-            switch ($this->client->state) {
-                case Client::STATE_COMMAND:
-                    $this->commandHandler();
-                    break;
-                case Client::STATE_ADD_CITY:
-                    $this->addCityHandler();
-                    break;
-                case Client::STATE_DELETE_CITY:
-                    $this->deleteCityHandler();
-                    break;
+                switch ($this->client->state) {
+                    case Client::STATE_COMMAND:
+                        $this->commandHandler();
+                        break;
+                    case Client::STATE_ADD_CITY:
+                        $this->addCityHandler();
+                        break;
+                    case Client::STATE_DELETE_CITY:
+                        $this->deleteCityHandler();
+                        break;
+                }
+            } elseif (array_key_exists('sticker', $this->message)) {
+                Telegram::sendMessage([
+                    'chat_id' => $this->message['chat']['id'],
+                    'text' => 'Мне не нравятся стикеры.',
+                ]);
+            } else {
+                Telegram::sendMessage([
+                    'chat_id' => $this->message['chat']['id'],
+                    'text' => 'Я не понимаю.',
+                ]);
             }
         }
 
