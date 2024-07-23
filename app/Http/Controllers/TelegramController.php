@@ -146,6 +146,7 @@ class TelegramController extends Controller
         } else {
             Telegram::sendMessage([
                 'chat_id' => $this->message['chat']['id'],
+                'text' => "Передумали удалять города.",
                 'reply_markup' => Keyboard::remove(['selective' => false]),
             ]);
         }
