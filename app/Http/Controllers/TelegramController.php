@@ -27,8 +27,6 @@ class TelegramController extends Controller
 
         $this->message = request('message');
 
-        Log::info('request', [$this->message]);
-
         if ($this->message && $this->message['text'] ?? false) {
 
             $this->client = $this->getClient();
@@ -53,8 +51,6 @@ class TelegramController extends Controller
 
     private function commandHandler(): void
     {
-        Log::info('request2', [$this->message]);
-
         switch ($this->message['text']) {
             case '/start':
                 $this->commandStartHandler();
