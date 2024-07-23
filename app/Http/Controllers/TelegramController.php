@@ -36,8 +36,6 @@ class TelegramController extends Controller
 
         $this->chatId = $this->update->message->chat->id;
 
-        \Log::info('text', [$this->text]);
-
         if ($this->update->message) {
             if ($this->text) {
 
