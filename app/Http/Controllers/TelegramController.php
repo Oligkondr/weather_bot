@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\City;
 use App\Models\Client;
 use App\Services\Weather;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Log;
 use Telegram\Bot\Keyboard\Keyboard;
 use Telegram\Bot\Laravel\Facades\Telegram;
 
@@ -18,78 +21,74 @@ class TelegramController extends Controller
 
     private bool $isNewClient = false;
 
-    public function webhook(Weather $weather): void
+    public function webhook(Weather $weather): JsonResponse
     {
         $this->weather = $weather;
 
         $this->message = request('message');
 
-        \Log::info('request', [$this->message]);
+        Log::info('request', [$this->message]);
 
-        if (!$this->message) {
-            exit();
+        if ($this->message && $this->message['text'] ?? false) {
+
+            $this->client = $this->getClient();
+
+            switch ($this->client->state) {
+                case Client::STATE_COMMAND:
+                    $this->commandHandler();
+                    break;
+                case Client::STATE_ADD_CITY:
+                    $this->addCityHandler();
+                    break;
+                case Client::STATE_DELETE_CITY:
+                    $this->deleteCityHandler();
+                    break;
+            }
         }
 
-        $this->client = $this->getClient();
-
-        switch ($this->client->state) {
-            case Client::STATE_COMMAND:
-                $this->commandHandler();
-                break;
-            case Client::STATE_ADD_CITY:
-                $this->addCityHandler();
-                break;
-            case Client::STATE_DELETE_CITY:
-                $this->deleteCityHandler();
-                break;
-        }
+        return response()->json([
+            'success' => true,
+        ]);
     }
 
     private function commandHandler(): void
     {
-        \Log::info('request2', [$this->message]);
+        Log::info('request2', [$this->message]);
 
-        if ($this->message['text']) {
-            switch ($this->message['text']) {
-                case '/start':
-                    $this->commandStartHandler();
-                    break;
+        switch ($this->message['text']) {
+            case '/start':
+                $this->commandStartHandler();
+                break;
 
-                case '/help':
-                    $this->commandHelpHandler();
-                    break;
+            case '/help':
+                $this->commandHelpHandler();
+                break;
 
-                case '/get_weather':
-                    $this->commandGetWeatherHandler();
-                    break;
+            case '/get_weather':
+                $this->commandGetWeatherHandler();
+                break;
 
-                case '/add_city':
-                    $this->commandAddCityHandler();
-                    break;
+            case '/add_city':
+                $this->commandAddCityHandler();
+                break;
 
-                case '/delete_city':
-                    $this->commandDeleteCityHandler();
-                    break;
+            case '/delete_city':
+                $this->commandDeleteCityHandler();
+                break;
 
-                case '/show_city':
-                    $this->commandShowCityHandler();
-                    break;
+            case '/show_city':
+                $this->commandShowCityHandler();
+                break;
 
-                case '/test':
-                    $this->commandTestHandler();
-                    break;
+            case '/test':
+                $this->commandTestHandler();
+                break;
 
-                default:
-                    Telegram::sendMessage([
-                        'chat_id' => $this->message['chat']['id'],
-                        'text' => "{$this->client->first_name}, вы отправили неизвестную команду.",
-                    ]);
-            }
-        } elseif ($this->message['sticker']) {
-            Telegram::sendMessage([
-                'chat_id' => $this->message['chat']['id'],
-                'text' => "{$this->client->first_name}, вы отправили неизвестную команду.",
-            ]);
+            default:
+                Telegram::sendMessage([
+                    'chat_id' => $this->message['chat']['id'],
+                    'text' => "{$this->client->first_name}, вы отправили неизвестную команду.",
+                ]);
         }
     }
 
@@ -106,7 +105,7 @@ class TelegramController extends Controller
                     try {
                         $city = $this->weather->getCityByName($name);
 
-                    } catch (\Exception $e) {
+                    } catch (Exception $e) {
                         $text = "\"{$name}\", не знаем такого города.";
 
                         Telegram::sendMessage([
