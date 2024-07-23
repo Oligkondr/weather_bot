@@ -6,6 +6,7 @@ use App\Models\City;
 use App\Services\Weather;
 use Exception;
 use Illuminate\Console\Command;
+use Illuminate\Support\Str;
 use Telegram\Bot\Laravel\Facades\Telegram;
 
 class TestCommand extends Command
@@ -30,7 +31,6 @@ class TestCommand extends Command
      */
     public function handle(Weather $weather)
     {
-        $city = City::find(11);
-        dd($weather->getByCity($city));
+        dd(Str::ucfirst('яблоко зеленое'));
     }
 }

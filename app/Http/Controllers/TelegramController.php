@@ -7,6 +7,7 @@ use App\Models\Client;
 use App\Services\Weather;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Str;
 use Telegram\Bot\Keyboard\Keyboard;
 use Telegram\Bot\Laravel\Facades\Telegram;
 
@@ -242,10 +243,9 @@ class TelegramController extends Controller
             foreach ($cities as $city) {
                 $response = $this->weather->getByCity($city);
 
-                $text = "{$response['name']}:" . PHP_EOL;
-                $text .= ' ' . PHP_EOL;
+                $text = "{$response['name']}:" . PHP_EOL . PHP_EOL;
                 $text .= "Температура: {$response['main']['temp']} °C" . PHP_EOL;
-                $text .= "{$response['weather'][0]['description']}" . PHP_EOL;
+                $text .= Str::ucfirst($response['weather'][0]['description']) . PHP_EOL;
                 $text .= "Скорость ветра: {$response['wind']['speed']} м/c" . PHP_EOL;
 
                 Telegram::sendMessage([
