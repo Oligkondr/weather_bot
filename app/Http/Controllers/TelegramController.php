@@ -119,13 +119,16 @@ class TelegramController extends Controller
 
     private function deleteCityHandler(): void
     {
+        $city = City::query()
+            ->where('name', 'like', $this->message['text'])
+            ->first();
 
-//        $this->client->cities()->detach($city->id);
+        $this->client->cities()->detach($city->id);
 
         Telegram::sendMessage([
             'chat_id' => $this->message['chat']['id'],
             'text' => 'Город были удален.',
-//            'reply_markup' => Keyboard::remove(['selective' => false]),
+            'reply_markup' => Keyboard::remove(['selective' => false]),
         ]);
 
         $this->client->state = Client::STATE_COMMAND;
