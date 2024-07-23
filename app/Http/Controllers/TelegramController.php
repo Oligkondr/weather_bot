@@ -47,6 +47,8 @@ class TelegramController extends Controller
 
     private function commandHandler(): void
     {
+        \Log::info('request2', [$this->message]);
+
         if ($this->message['text']) {
             switch ($this->message['text']) {
                 case '/start':
