@@ -129,15 +129,22 @@ class TelegramController extends Controller
                     }
                 }
 
-                if ($city && !$this->client->cities->where('id', $city->id)->count()) {
-                    $this->client->cities()->attach($city->id);
+                if ($city) {
+                    if ($this->client->cities->where('id', $city->id)->count()) {
 
-                    $text = "{$name}, запомнили этот город.";
+                        $text = "{$name}, этот город уже есть.";
+
+                    } else {
+                        $this->client->cities()->attach($city->id);
+
+                        $text = "{$name}, запомнили этот город.";
+                    }
 
                     Telegram::sendMessage([
                         'chat_id' => $this->chatId,
                         'text' => $text,
                     ]);
+
                 }
             });
 
