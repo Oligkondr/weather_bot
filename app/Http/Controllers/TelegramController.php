@@ -66,6 +66,10 @@ class TelegramController extends Controller
                 $this->commandDeleteCityHandler();
                 break;
 
+            case '/show_city':
+                $this->commandShowCityHandler();
+                break;
+
             case '/test':
                 $this->commandTestHandler();
                 break;
@@ -184,6 +188,35 @@ class TelegramController extends Controller
     }
 
     private function commandGetWeatherHandler(): void
+    {
+        if ($this->client->cities->isEmpty()) {
+
+            $textA = 'у вас пока нет городов, в которых вы хотите видеть погоду.';
+            $textB = 'Напишите город (если несколько то через запятую) в котором хотите ее видеть.';
+
+            Telegram::sendMessage([
+                'chat_id' => $this->message['chat']['id'],
+                'text' => "{$this->client->first_name}, {$textA}",
+            ]);
+
+            Telegram::sendMessage([
+                'chat_id' => $this->message['chat']['id'],
+                'text' => "{$this->client->first_name}, {$textB}",
+            ]);
+
+            $this->client->state = Client::STATE_ADD_CITY;
+            $this->client->save();
+        } else {
+            Telegram::sendMessage([
+                'chat_id' => $this->message['chat']['id'],
+                'text' => "Ваши города: {$this->client->cities->implode('name', ', ')}",
+            ]);
+
+
+        }
+    }
+
+    private function commandShowCityHandler()
     {
         if ($this->client->cities->isEmpty()) {
 
