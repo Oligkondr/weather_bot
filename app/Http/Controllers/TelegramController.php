@@ -24,6 +24,8 @@ class TelegramController extends Controller
 
         $this->message = request('message');
 
+        \Log::info('request', [$this->message]);
+
         if (!$this->message) {
             exit();
         }
