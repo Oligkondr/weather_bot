@@ -129,7 +129,7 @@ class TelegramController extends Controller
                     }
                 }
 
-                if ($city) {
+                if ($city && !$this->client->cities->where('id', $city->id)->count()) {
                     $this->client->cities()->attach($city->id);
 
                     $text = "{$name}, запомнили этот город.";
