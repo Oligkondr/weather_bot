@@ -45,40 +45,44 @@ class TelegramController extends Controller
 
     private function commandHandler(): void
     {
-        switch ($this->message['text']) {
-            case '/start':
-                $this->commandStartHandler();
-                break;
+        if ($this->message['text']) {
+            switch ($this->message['text']) {
+                case '/start':
+                    $this->commandStartHandler();
+                    break;
 
-            case '/help':
-                $this->commandHelpHandler();
-                break;
+                case '/help':
+                    $this->commandHelpHandler();
+                    break;
 
-            case '/get_weather':
-                $this->commandGetWeatherHandler();
-                break;
+                case '/get_weather':
+                    $this->commandGetWeatherHandler();
+                    break;
 
-            case '/add_city':
-                $this->commandAddCityHandler();
-                break;
+                case '/add_city':
+                    $this->commandAddCityHandler();
+                    break;
 
-            case '/delete_city':
-                $this->commandDeleteCityHandler();
-                break;
+                case '/delete_city':
+                    $this->commandDeleteCityHandler();
+                    break;
 
-            case '/show_city':
-                $this->commandShowCityHandler();
-                break;
+                case '/show_city':
+                    $this->commandShowCityHandler();
+                    break;
 
-            case '/test':
-                $this->commandTestHandler();
-                break;
+                case '/test':
+                    $this->commandTestHandler();
+                    break;
 
-            default:
-                Telegram::sendMessage([
-                    'chat_id' => $this->message['chat']['id'],
-                    'text' => "{$this->client->first_name}, вы отправили неизвестную команду.",
-                ]);
+                default:
+                    Telegram::sendMessage([
+                        'chat_id' => $this->message['chat']['id'],
+                        'text' => "{$this->client->first_name}, вы отправили неизвестную команду.",
+                    ]);
+            }
+        } else {
+            exit();
         }
     }
 
@@ -137,7 +141,7 @@ class TelegramController extends Controller
                 'text' => 'Город были удален.',
                 'reply_markup' => Keyboard::remove(['selective' => false]),
             ]);
-        } elseif ($name != 'Отмена'){
+        } elseif ($name != 'Отмена') {
             Telegram::sendMessage([
                 'chat_id' => $this->message['chat']['id'],
                 'text' => "Город \"{$name}\" не найден.",

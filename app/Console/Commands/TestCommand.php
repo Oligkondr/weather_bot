@@ -30,7 +30,7 @@ class TestCommand extends Command
      */
     public function handle(Weather $weather)
     {
-        $city = City::find(1);
+        $city = City::find(11);
         dd($weather->getByCity($city));
     }
 }
