@@ -330,10 +330,10 @@ class TelegramController extends Controller
             'chat_id' => $this->chatId,
             'text' => 'Test',
         ]);
-        Telegram::sendPhoto([
-            'chat_id' => $this->chatId,
-            'photo' => 'https://at-cdn-s02.audiotool.com/2017/11/17/documents/h6rcx3xj8hr/0/cover256x256-ab33c6edd966430f81d31073f50842cf.jpg',
-            'caption' => 'Test',
-        ]);
+//        Telegram::sendPhoto([
+//            'chat_id' => $this->chatId,
+//            'photo' => 'https://at-cdn-s02.audiotool.com/2017/11/17/documents/h6rcx3xj8hr/0/cover256x256-ab33c6edd966430f81d31073f50842cf.jpg',
+//            'caption' => 'Test',
+//        ]);
     }
 }
