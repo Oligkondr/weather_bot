@@ -328,8 +328,8 @@ class TelegramController extends Controller
     {
         Telegram::sendMessage([
             'chat_id' => $this->chatId,
-            'photo' => 'cloudy.jpg',
-            'text' => 'Test',
+            'photo' => app_path('cloudy.jpg'),
+            'caption' => 'Test',
         ]);
     }
 }
