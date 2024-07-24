@@ -266,6 +266,8 @@ class TelegramController extends Controller
                 $text .= Str::ucfirst($response['weather'][0]['description']) . PHP_EOL;
                 $text .= "Скорость ветра: {$response['wind']['speed']} м/c" . PHP_EOL;
 
+                $photo = str_replace('n', 'd', $response['weather'][0]['icon']);
+
                 Telegram::sendMessage([
                     'chat_id' => $this->chatId,
                     'text' => $text,
@@ -273,7 +275,7 @@ class TelegramController extends Controller
 
                 Telegram::sendPhoto([
                     'chat_id' => $this->chatId,
-                    'photo' => InputFile::create("https://weathercast.ru/storage/images/weather/{$response['weather'][0]['icon']}.jpg"),
+                    'photo' => InputFile::create("https://weathercast.ru/storage/images/weather/{$photo}.jpg"),
                     'caption' => $text,
                 ]);
 
