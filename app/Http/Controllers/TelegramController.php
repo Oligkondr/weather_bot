@@ -19,7 +19,7 @@ class TelegramController extends Controller
 
     private ?string $text;
 
-    private int $chatId;
+    private ?int $chatId;
 
     private ?Client $client;
 
@@ -55,7 +55,7 @@ class TelegramController extends Controller
                         $this->deleteCityHandler();
                         break;
                 }
-            } else {
+            } elseif ($this->chatId) {
                 Telegram::sendMessage([
                     'chat_id' => $this->chatId,
                     'text' => 'Я не понимаю.',
