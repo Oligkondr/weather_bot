@@ -328,7 +328,7 @@ class TelegramController extends Controller
     {
         Telegram::sendMessage([
             'chat_id' => $this->chatId,
-            'photo' => 'https://catherineasquithgallery.com/uploads/posts/2023-01/1674324067_catherineasquithgallery-com-p-fon-serie-oblaka-foto-8.jpg',
+            'photo' => 'cloudy.jpg',
             'text' => 'Test',
         ]);
     }
