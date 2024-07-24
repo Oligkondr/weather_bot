@@ -332,7 +332,7 @@ class TelegramController extends Controller
         ]);
         Telegram::sendPhoto([
             'chat_id' => $this->chatId,
-            'photo' => app_path('cloudy.jpg'),
+            'photo' => 'https://catherineasquithgallery.com/uploads/posts/2023-01/1674324067_catherineasquithgallery-com-p-fon-serie-oblaka-foto-8.jpg',
             'caption' => 'Test',
         ]);
     }
