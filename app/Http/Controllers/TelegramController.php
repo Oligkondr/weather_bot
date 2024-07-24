@@ -326,26 +326,10 @@ class TelegramController extends Controller
 
     private function commandTestHandler(): void
     {
-        $ci = ['Москва', 'Пер', 'Мер',];
-
-        $replyMarkup = Keyboard::make()
-            ->setResizeKeyboard(true)
-            ->setOneTimeKeyboard(true);
-
-        foreach ($ci as $sc) {
-            $replyMarkup->row([
-                Keyboard::button($sc),
-            ]);
-        }
-
-        $replyMarkup->row([
-            Keyboard::button('Отмена'),
-        ]);
-
         Telegram::sendMessage([
             'chat_id' => $this->chatId,
+            'photo' => 'https://catherineasquithgallery.com/uploads/posts/2023-01/1674324067_catherineasquithgallery-com-p-fon-serie-oblaka-foto-8.jpg',
             'text' => 'Test',
-            'reply_markup' => $replyMarkup,
         ]);
     }
 }
