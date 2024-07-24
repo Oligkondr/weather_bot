@@ -329,8 +329,39 @@ class TelegramController extends Controller
     {
         Telegram::sendPhoto([
             'chat_id' => $this->chatId,
-            'photo' => InputFile::create('https://weathercast.ru/storage/images/weather/lite-clouds.jpg'),
-            'caption' => 'Test',
+            'photo' => InputFile::create('https://weathercast.ru/storage/images/weather/01d.jpg'),
+        ]);
+        Telegram::sendPhoto([
+            'chat_id' => $this->chatId,
+            'photo' => InputFile::create('https://weathercast.ru/storage/images/weather/02d.jpg'),
+        ]);
+        Telegram::sendPhoto([
+            'chat_id' => $this->chatId,
+            'photo' => InputFile::create('https://weathercast.ru/storage/images/weather/03d.jpg'),
+        ]);
+        Telegram::sendPhoto([
+            'chat_id' => $this->chatId,
+            'photo' => InputFile::create('https://weathercast.ru/storage/images/weather/04d.jpg'),
+        ]);
+        Telegram::sendPhoto([
+            'chat_id' => $this->chatId,
+            'photo' => InputFile::create('https://weathercast.ru/storage/images/weather/09d.jpg'),
+        ]);
+        Telegram::sendPhoto([
+            'chat_id' => $this->chatId,
+            'photo' => InputFile::create('https://weathercast.ru/storage/images/weather/10d.jpg'),
+        ]);
+        Telegram::sendPhoto([
+            'chat_id' => $this->chatId,
+            'photo' => InputFile::create('https://weathercast.ru/storage/images/weather/11d.jpg'),
+        ]);
+        Telegram::sendPhoto([
+            'chat_id' => $this->chatId,
+            'photo' => InputFile::create('https://weathercast.ru/storage/images/weather/13d.jpg'),
+        ]);
+        Telegram::sendPhoto([
+            'chat_id' => $this->chatId,
+            'photo' => InputFile::create('https://weathercast.ru/storage/images/weather/50d.jpg'),
         ]);
     }
 }
