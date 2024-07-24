@@ -329,7 +329,8 @@ class TelegramController extends Controller
     {
         Telegram::sendPhoto([
             'chat_id' => $this->chatId,
-            'photo' => InputFile::create('https://telegram-bot-sdk.com/img/hero-banner.png'),
+//            'photo' => InputFile::create('https://telegram-bot-sdk.com/img/hero-banner.png'),
+            'photo' => InputFile::create('https://openweathermap.org/img/wn/10d@4x.png'),
             'caption' => 'Test',
         ]);
     }
