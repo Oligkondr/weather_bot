@@ -268,11 +268,6 @@ class TelegramController extends Controller
 
                 $photo = str_replace('n', 'd', $response['weather'][0]['icon']);
 
-                Telegram::sendMessage([
-                    'chat_id' => $this->chatId,
-                    'text' => $text,
-                ]);
-
                 Telegram::sendPhoto([
                     'chat_id' => $this->chatId,
                     'photo' => InputFile::create("https://weathercast.ru/storage/images/weather/{$photo}.jpg"),
