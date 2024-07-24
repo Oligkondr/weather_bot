@@ -327,10 +327,6 @@ class TelegramController extends Controller
 
     private function commandTestHandler(): void
     {
-        Telegram::sendMessage([
-            'chat_id' => $this->chatId,
-            'text' => 'Test',
-        ]);
         Telegram::sendPhoto([
             'chat_id' => $this->chatId,
             'photo' => InputFile::create('https://telegram-bot-sdk.com/img/hero-banner.png'),
