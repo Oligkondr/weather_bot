@@ -333,7 +333,7 @@ class TelegramController extends Controller
         ]);
         Telegram::sendPhoto([
             'chat_id' => $this->chatId,
-            'photo' => new InputFile('https://telegram-bot-sdk.com/img/hero-banner.png'),
+            'photo' => new InputFile('https://telegram-bot-sdk.com/img/hero-banner.png', 'cloudy'),
             'caption' => 'Test',
         ]);
     }
