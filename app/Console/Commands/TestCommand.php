@@ -6,6 +6,7 @@ use App\Models\City;
 use App\Services\Weather;
 use Exception;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Telegram\Bot\Laravel\Facades\Telegram;
 
@@ -31,6 +32,6 @@ class TestCommand extends Command
      */
     public function handle(Weather $weather)
     {
-        dd(Str::ucfirst('яблоко зеленое'));
+        dd(Storage::url('images/weather/clear_sky.jpeg'));
     }
 }

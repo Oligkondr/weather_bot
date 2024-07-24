@@ -329,7 +329,7 @@ class TelegramController extends Controller
     {
         Telegram::sendPhoto([
             'chat_id' => $this->chatId,
-            'photo' => InputFile::create('https://weathercast.ru/storage/images/weather/clear_sky.jpg'),
+            'photo' => InputFile::create('https://weathercast.ru/storage/images/weather/clear_sky.jpeg'),
             'caption' => 'Test',
         ]);
     }
