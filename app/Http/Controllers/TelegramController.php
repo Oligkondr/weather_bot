@@ -32,9 +32,9 @@ class TelegramController extends Controller
 
         $this->update = Telegram::getWebhookUpdate();
 
-        $this->text = $this->update->message->text;
+        $this->text = $this->update->message?->text;
 
-        $this->chatId = $this->update->message->chat->id;
+        $this->chatId = $this->update->message?->chat->id;
 
         if ($this->update->message) {
             if ($this->text) {

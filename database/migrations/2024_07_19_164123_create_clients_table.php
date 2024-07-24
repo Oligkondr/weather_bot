@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('ext_id', 16);
             $table->string('first_name');
-            $table->string('last_name');
+            $table->string('last_name')->nullable();
             $table->string('username');
             $table->string('language_code', 2);
             $table->timestamps();
