@@ -305,6 +305,7 @@ class TelegramController extends Controller
         Telegram::sendMessage([
             'chat_id' => $this->chatId,
             'text' => "В каких еще городах хотите видеть погоду?",
+            'reply_markup' => $replyMarkup,
         ]);
 
         $this->client->state = Client::STATE_ADD_CITY;
