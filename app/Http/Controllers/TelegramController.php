@@ -109,45 +109,53 @@ class TelegramController extends Controller
 
     private function addCityHandler(): void
     {
-        collect(explode(",", $this->text))
-            ->each(function (string $name) {
-                $name = trim($name);
-                $city = City::query()
-                    ->where('name', 'like', $name)
-                    ->first();
+        if ($this->text === 'Отмена') {
+            Telegram::sendMessage([
+                'chat_id' => $this->chatId,
+                'text' => "Передумали добавлять города.",
+                'reply_markup' => Keyboard::remove(['selective' => false]),
+            ]);
+        } else {
+            collect(explode(",", $this->text))
+                ->each(function (string $name) {
+                    $name = trim($name);
+                    $city = City::query()
+                        ->where('name', 'like', $name)
+                        ->first();
 
-                if (!$city) {
-                    try {
-                        $city = $this->weather->getCityByName($name);
+                    if (!$city) {
+                        try {
+                            $city = $this->weather->getCityByName($name);
 
-                    } catch (Exception $e) {
-                        $text = "\"{$name}\", не знаем такого города.";
+                        } catch (Exception $e) {
+                            $text = "\"{$name}\", не знаем такого города.";
+
+                            Telegram::sendMessage([
+                                'chat_id' => $this->chatId,
+                                'text' => $text,
+                            ]);
+                        }
+                    }
+
+                    if ($city) {
+                        if ($this->client->cities->where('id', $city->id)->count()) {
+
+                            $text = "{$name}, этот город уже есть.";
+
+                        } else {
+                            $this->client->cities()->attach($city->id);
+
+                            $text = "{$name}, запомнили этот город.";
+                        }
 
                         Telegram::sendMessage([
                             'chat_id' => $this->chatId,
                             'text' => $text,
                         ]);
+
                     }
-                }
-
-                if ($city) {
-                    if ($this->client->cities->where('id', $city->id)->count()) {
-
-                        $text = "{$name}, этот город уже есть.";
-
-                    } else {
-                        $this->client->cities()->attach($city->id);
-
-                        $text = "{$name}, запомнили этот город.";
-                    }
-
-                    Telegram::sendMessage([
-                        'chat_id' => $this->chatId,
-                        'text' => $text,
-                    ]);
-
-                }
-            });
+                });
+        }
 
         $this->client->state = Client::STATE_COMMAND;
         $this->client->save();
