@@ -219,6 +219,8 @@ class TelegramController extends Controller
             'chat_id' => $this->chatId,
             'text' => "{$this->client->first_name}, {$text}",
         ]);
+
+        $this->commandHelpHandler();
     }
 
     private function commandHelpHandler(): void
