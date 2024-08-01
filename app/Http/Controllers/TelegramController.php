@@ -294,6 +294,14 @@ class TelegramController extends Controller
 
     private function commandAddCityHandler(): void
     {
+        $replyMarkup = Keyboard::make()
+            ->setResizeKeyboard(true)
+            ->setOneTimeKeyboard(true);
+
+        $replyMarkup->row([
+            Keyboard::button('Отмена'),
+        ]);
+
         Telegram::sendMessage([
             'chat_id' => $this->chatId,
             'text' => "{$this->client->first_name}, в каких еще городах хотите видеть погоду?",
