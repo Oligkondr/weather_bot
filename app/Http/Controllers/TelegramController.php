@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Client;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Inertia\Inertia;
 
 class TelegramController extends Controller
 {
@@ -16,6 +16,6 @@ class TelegramController extends Controller
             ->where(DB::raw("MD5(CONCAT(ext_id, '{$appKey}'))"), $token)
             ->first();
 
-        dd($client->toArray());
+        return Inertia::render('Link');
     }
 }
