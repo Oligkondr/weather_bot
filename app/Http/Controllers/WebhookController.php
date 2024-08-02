@@ -355,9 +355,11 @@ class WebhookController extends Controller
 
     private function commandLinkHandler(): void
     {
+        $url = route('telegram.bot', [md5($this->client->ext_id . config('app.key'))]);
+
         Telegram::sendMessage([
             'chat_id' => $this->chatId,
-            'text' => 'ссылка на сайт',
+            'text' => "Перейдите по ссылке: {$url}",
         ]);
     }
 
