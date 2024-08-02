@@ -2,12 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TelegramController extends Controller
 {
     public function bot(string $token)
     {
-        dd($token);
+        $appKey = config('app.key');
+
+        $client = Client::query()
+            ->where(DB::raw("MD5(CONCAT(ext_id, '{$appKey}'))"), $token)
+            ->first();
+
+        dd($client->toArray());
     }
 }
