@@ -13,7 +13,7 @@ use Telegram\Bot\Keyboard\Keyboard;
 use Telegram\Bot\Laravel\Facades\Telegram;
 use Telegram\Bot\Objects\Update;
 
-class TelegramController extends Controller
+class WebhookController extends Controller
 {
     private Update $update;
 
@@ -97,6 +97,10 @@ class TelegramController extends Controller
 
             case '/test':
                 $this->commandTestHandler();
+                break;
+
+            case '/link':
+                $this->commandLinkHandler();
                 break;
 
             default:
@@ -239,6 +243,7 @@ class TelegramController extends Controller
         $text .= '/add_city - добавляет новые города' . PHP_EOL;
         $text .= '/delete_city - удаляет города' . PHP_EOL;
         $text .= '/show_city - показывает выбранные города' . PHP_EOL;
+        $text .= '/link - привязать аккаунт к нашему сайту' . PHP_EOL;
 
         Telegram::sendMessage([
             'chat_id' => $this->chatId,
@@ -345,6 +350,14 @@ class TelegramController extends Controller
             'chat_id' => $this->chatId,
             'text' => "{$this->client->first_name}, в каком городе вы больше не хотите видеть погоду?",
             'reply_markup' => $replyMarkup,
+        ]);
+    }
+
+    private function commandLinkHandler(): void
+    {
+        Telegram::sendMessage([
+            'chat_id' => $this->chatId,
+            'text' => 'ссылка на сайт',
         ]);
     }
 
