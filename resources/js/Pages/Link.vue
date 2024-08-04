@@ -8,12 +8,24 @@ defineProps({
 </script>
 
 <template>
-<div>
-    {{ client.ext_id }}
-    {{ client.first_name }}
-    {{ client.last_name }}
-    {{ client.username }}
-</div>
+    <div>
+        {{ client.ext_id }}
+    </div>
+    <div>
+        {{ client.first_name }}
+    </div>
+    <div>
+        {{ client.last_name }}
+    </div>
+    <div>
+        {{ client.username }}
+    </div>
+    <div>
+        {{ client.username }}
+    </div>
+    <div>
+        {{ client.verification_code}}
+    </div>
 </template>
 
 <style scoped>
