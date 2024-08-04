@@ -1,10 +1,18 @@
 <script setup>
 
+defineProps({
+    client: Object,
+});
+
+
 </script>
 
 <template>
 <div>
-    123
+    {{ client.ext_id }}
+    {{ client.first_name }}
+    {{ client.last_name }}
+    {{ client.username }}
 </div>
 </template>
 

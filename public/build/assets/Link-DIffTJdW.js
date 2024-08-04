@@ -1,0 +1,1 @@
+import{o as n,f as a,t}from"./app-B3EGMqTW.js";const r={__name:"Link",props:{client:Object},setup(e){return(c,i)=>(n(),a("div",null,t(e.client.ext_id)+" "+t(e.client.first_name)+" "+t(e.client.last_name)+" "+t(e.client.username),1))}};export{r as default};
