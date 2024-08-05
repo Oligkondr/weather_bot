@@ -22,5 +22,6 @@ Route::middleware('auth')->group(function () {
 Route::post('telegram/webhook', [WebhookController::class, 'webhook'])->name('telegram.webhook');
 
 Route::get('telegram/bot/{token}', [TelegramController::class, 'bot'])->name('telegram.bot');
+Route::post('telegram/bot/{client}', [TelegramController::class, 'bind'])->name('telegram.bind');
 
 require __DIR__ . '/auth.php';

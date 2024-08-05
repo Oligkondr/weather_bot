@@ -215,6 +215,11 @@ class WebhookController extends Controller
         $client->first_name = $this->update->message->from->firstName;
         $client->last_name = $this->update->message->from->lastName;
         $client->username = $this->update->message->from->username;
+
+        if ($client->username) {
+            $client->login = $client->username;
+        }
+
         $client->language_code = $this->update->message->from->languageCode;
         $client->save();
 
