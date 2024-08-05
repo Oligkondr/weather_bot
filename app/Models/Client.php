@@ -7,10 +7,11 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Carbon;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $ext_id
@@ -43,7 +44,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Client whereUsername($value)
  * @mixin Eloquent
  */
-class Client extends Model
+class Client extends Authenticatable
 {
     use HasFactory;
 

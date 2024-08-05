@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Closure;
 use Illuminate\Foundation\Http\FormRequest;
 
 class BindRequest extends FormRequest
@@ -21,9 +22,20 @@ class BindRequest extends FormRequest
      */
     public function rules(): array
     {
+        $client = $this->route('client');
+
         return [
             'login' => 'required|string',
-            'code' => 'required|string|regex:/^\d{4}$/',
+            'code' => [
+                'required',
+                'string',
+                'regex:/^\d{4}$/',
+                function (string $attribute, mixed $value, Closure $fail) use ($client) {
+                    if ($value != $client->code) {
+                        $fail("The {$attribute} is invalid.");
+                    }
+                },
+            ],
         ];
     }
 }

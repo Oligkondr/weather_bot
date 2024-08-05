@@ -1,10 +1,15 @@
 <script setup>
-
 import Header from '@/Components/Header.vue';
-import Main from '@/Components/Main.vue';
+
+const props = defineProps({
+    client: Object,
+});
+
 </script>
 
 <template>
     <Header/>
-    <Main/>
+    <div>
+        {{ client }}
+    </div>
 </template>

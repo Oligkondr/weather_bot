@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Inertia\Inertia;
+use Illuminate\Support\Facades\Auth;
+use Inertia\Response;
+use Inertia\ResponseFactory;
 
 class WelcomeController extends Controller
 {
-    public function index()
+    public function index(): Response|ResponseFactory
     {
-        return Inertia::render('Welcome');
+        $client = Auth::user();
+
+        return inertia('Welcome', [
+            'client' => $client,
+        ]);
     }
 }

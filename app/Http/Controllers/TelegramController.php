@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\BindRequest;
 use App\Models\Client;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Inertia\Inertia;
 use Inertia\Response;
-use Telegram\Bot\Laravel\Facades\Telegram;
+use Illuminate\Http\RedirectResponse;
 
 class TelegramController extends Controller
 {
@@ -25,19 +25,25 @@ class TelegramController extends Controller
         if ($client->login) {
             dd($client->login);
         } else {
-            Telegram::sendMessage([
-                'chat_id' => $client->ext_id,
-                'text' => $client->code,
-            ]);
+//            Telegram::sendMessage([
+//                'chat_id' => $client->ext_id,
+//                'text' => $client->code,
+//            ]);
 
-            return Inertia::render('Bot', [
+            return inertia('Bot', [
                 'client' => $client,
             ]);
         }
     }
 
-    public function bind(BindRequest $request, Client $client)
+    public function bind(BindRequest $request, Client $client): RedirectResponse
     {
-        dd($request->validated(), $client->toArray());
+        $client->code = null;
+        $client->login = $request->validated('login');
+        $client->save();
+
+        Auth::login($client);
+
+        return to_route('welcome');
     }
 }

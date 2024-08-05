@@ -14,6 +14,7 @@ const form = reactive({
 
 function submit () {
     router.post(route('telegram.bind', [props.client.id]), form);
+    form.code = null
 }
 
 </script>
