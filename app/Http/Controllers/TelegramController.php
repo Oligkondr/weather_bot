@@ -20,13 +20,13 @@ class TelegramController extends Controller
             ->where(DB::raw("MD5(CONCAT(ext_id, '{$appKey}'))"), $token)
             ->first();
 
+        $client->sendCode();
+
         if ($client->login) {
             return to_route('code', [
                 'login' => $client->login,
             ]);
         } else {
-            $client->sendCode();
-
             return inertia('Bot', [
                 'client' => $client,
             ]);
