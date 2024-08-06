@@ -42,11 +42,6 @@ class AuthController extends Controller
     {
         $client = $request->client;
 
-        Telegram::sendMessage([
-            'chat_id' => $client->ext_id,
-            'text' => $client->code,
-        ]);
-
         $client->sendCode();
 
         return to_route('code', [
