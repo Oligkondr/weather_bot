@@ -21,7 +21,7 @@ class TelegramController extends Controller
             ->first();
 
         if ($client->login) {
-            return to_route('cod', [
+            return to_route('code', [
                 'login' => $client->login,
             ]);
         } else {
