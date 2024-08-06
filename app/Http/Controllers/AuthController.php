@@ -8,7 +8,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Response;
 use Inertia\ResponseFactory;
-use Telegram\Bot\Laravel\Facades\Telegram;
 
 class AuthController extends Controller
 {
@@ -21,7 +20,12 @@ class AuthController extends Controller
 
     public function auth(AuthRequest $request): RedirectResponse
     {
-        Auth::login($request->client);
+        $client = $request->client;
+
+        Auth::login($client);
+
+        $client->code = null;
+        $client->save();
 
         return to_route('welcome');
     }
