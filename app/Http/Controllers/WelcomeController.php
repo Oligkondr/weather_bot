@@ -10,10 +10,6 @@ class WelcomeController extends Controller
 {
     public function index(): Response|ResponseFactory
     {
-        $client = Auth::user();
-
-        return inertia('Welcome', [
-            'client' => $client,
-        ]);
+        return inertia('Welcome');
     }
 }

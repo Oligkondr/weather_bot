@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Carbon;
+use Telegram\Bot\Laravel\Facades\Telegram;
 
 /**
  *
@@ -55,5 +56,16 @@ class Client extends Authenticatable
     public function cities(): BelongsToMany
     {
         return $this->belongsToMany(City::class);
+    }
+
+    public function sendCode(): void
+    {
+        $this->code = rand(1000, 9999);
+        $this->save();
+
+        Telegram::sendMessage([
+            'chat_id' => $this->ext_id,
+            'text' => $this->code,
+        ]);
     }
 }

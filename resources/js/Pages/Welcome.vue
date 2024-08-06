@@ -1,15 +1,18 @@
 <script setup>
 import Header from '@/Components/Header.vue';
 
-const props = defineProps({
-    client: Object,
-});
+import { computed } from 'vue'
+import { usePage } from '@inertiajs/vue3'
+
+const page = usePage()
+
+const user = computed(() => page.props.auth.user)
 
 </script>
 
 <template>
-    <Header/>
+    <Header :user="user"/>
     <div>
-        {{ client }}
+        {{ user }}
     </div>
 </template>
