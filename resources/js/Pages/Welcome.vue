@@ -1,12 +1,12 @@
 <script setup>
 import Header from '@/Components/Header.vue';
 
-import { computed } from 'vue'
-import { usePage } from '@inertiajs/vue3'
+import { computed } from 'vue';
+import { usePage } from '@inertiajs/vue3';
 
-const page = usePage()
+const page = usePage();
 
-const user = computed(() => page.props.auth.user)
+const user = computed(() => page.props.auth.user);
 
 </script>
 

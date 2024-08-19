@@ -1,4 +1,5 @@
 restart: stop up
+update: optimize ziggy
 
 env:
 	cp .env.example .env
@@ -11,6 +12,8 @@ data:
 
 optimize:
 	docker-compose exec --user=1000 laravel.test bash -c "php artisan optimize"
+ziggy:
+	docker-compose exec --user=1000 laravel.test bash -c "php artisan ziggy:generate"
 key-generate:
 	docker-compose exec --user=1000 laravel.test bash -c "php artisan key:generate"
 migrate:

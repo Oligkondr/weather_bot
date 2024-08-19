@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TelegramController;
 use App\Http\Controllers\WebhookController;
 use App\Http\Controllers\WelcomeController;
@@ -32,7 +33,10 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::post('logout', [AuthController::class, 'logout'])->name('telegram.logout');
+    Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+
+    Route::get('profile', [ProfileController::class, 'profile'])->name('profile');
+
 });
 
 //require __DIR__ . '/auth.php';
