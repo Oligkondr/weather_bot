@@ -14,13 +14,13 @@ defineProps({ cities: Array });
     <Layout>
         <div>
             <tabs>
-                <tab name="Profile">
+                <tab name="Профиль">
                     <div>
                         <div>Имя: {{ user.first_name }}</div>
                     </div>
                     <div>Фамилия: {{ user.last_name }}</div>
                 </tab>
-                <tab name="Cities">
+                <tab name="Ваши города">
                     <ul class="w-1/4">
                         <li v-for="city in cities" class="flex my-2 py-2 px-3 rounded bg-gray-100">
                             <span class="flex-1 mr-2">
