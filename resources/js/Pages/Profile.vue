@@ -1,5 +1,7 @@
 <script setup>
+import axios from 'axios';
 import { computed } from 'vue';
+import { router } from '@inertiajs/vue3';
 import { usePage } from '@inertiajs/vue3';
 import Layout from '@/Components/Layout.vue';
 
@@ -8,6 +10,17 @@ const page = usePage();
 const user = computed(() => page.props.auth.user);
 
 defineProps({ cities: Array });
+
+const deleteCity = (id) => {
+    if (confirm('Удалить?')) {
+        axios.delete(route('profile.city.delete', [id]))
+            .then(() => {
+                router.visit(route('profile.index'), {
+                    only: ['cities'],
+                });
+            });
+    }
+};
 </script>
 
 <template>
@@ -26,7 +39,7 @@ defineProps({ cities: Array });
                             <span class="flex-1 mr-2">
                                 {{ city.name }}
                             </span>
-                            <button class="text-red-500">
+                            <button class="text-red-500" @click="deleteCity(city.id)">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                      stroke-width="1.5" stroke="currentColor" class="size-6">
                                     <path stroke-linecap="round" stroke-linejoin="round"

@@ -35,8 +35,13 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
-    Route::get('profile', [ProfileController::class, 'profile'])->name('profile');
-
+    Route::prefix('profile')->name('profile.')->group(function () {
+        Route::get('', [ProfileController::class, 'profile'])->name('index');
+        Route::prefix('city')->name('city.')->group(function () {
+            Route::delete('{city}', [ProfileController::class, 'delete'])->name('delete');
+            Route::post('', [ProfileController::class, 'create'])->name('create');
+        });
+    });
 });
 
 //require __DIR__ . '/auth.php';
