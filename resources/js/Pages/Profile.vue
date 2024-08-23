@@ -21,6 +21,10 @@ const deleteCity = (id) => {
             });
     }
 };
+
+const createCity = () => {
+    alert(123);
+};
 </script>
 
 <template>
@@ -34,6 +38,15 @@ const deleteCity = (id) => {
                     <div>Фамилия: {{ user.last_name }}</div>
                 </tab>
                 <tab name="Ваши города">
+                    <button class="px-3 py-2 rounded bg-green-500 flex" @click="createCity">
+                        <span class="text-white text-xl">Добавить город</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                             stroke="currentColor" class="ml-2 size-7 text-white">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                        </svg>
+                    </button>
+
                     <ul class="w-1/4">
                         <li v-for="city in cities" class="flex my-2 py-2 px-3 rounded bg-gray-100">
                             <span class="flex-1 mr-2">
