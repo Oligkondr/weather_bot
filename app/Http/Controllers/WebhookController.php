@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\City;
 use App\Models\Client;
-use App\Services\Weather;
+use App\Services\WeatherService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
@@ -23,11 +23,11 @@ class WebhookController extends Controller
 
     private ?Client $client;
 
-    private Weather $weather;
+    private WeatherService $weather;
 
     private bool $isNewClient = false;
 
-    public function webhook(Weather $weather): JsonResponse
+    public function webhook(WeatherService $weather): JsonResponse
     {
         $this->weather = $weather;
 

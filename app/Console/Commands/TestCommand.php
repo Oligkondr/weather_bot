@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\City;
-use App\Services\Weather;
+use App\Services\WeatherService;
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
@@ -30,7 +30,7 @@ class TestCommand extends Command
      * Execute the console command.
      * @throws Exception
      */
-    public function handle(Weather $weather)
+    public function handle(WeatherService $weather)
     {
         dd(Storage::url('images/weather/clear_sky.jpeg'));
     }
